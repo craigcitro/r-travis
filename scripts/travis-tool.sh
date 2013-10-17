@@ -30,13 +30,14 @@ GithubPackage() {
   # Get the package name and strip it
   PACKAGE_NAME=$1
   shift
-
+  
   # Join the remaining args.
   ARGS=$(echo $* | sed -e 's/ /, /g')
   if [ -n "${ARGS}" ]; then
     ARGS=", ${ARGS}"
   fi
 
+  echo "Installing package: ${PACKAGE_NAME}"
   # Install the package.
   R --slave --vanilla -e "library(devtools); install_github(\"${PACKAGE_NAME}\"${ARGS})"
 }
@@ -47,13 +48,14 @@ InstallDeps() {
 }
 
 COMMAND=$1
+echo "Running command ${COMMAND}"
 shift
 case $COMMAND in
   "bootstrap")
     Bootstrap
     ;;
   "github_package")
-    GithubPackage
+    GithubPackage "$*"
     ;;
   "install_deps")
     InstallDeps
