@@ -50,6 +50,12 @@ InstallDeps() {
   sudo R --slave --vanilla -e 'library(devtools); suggests <- parse_deps(as.package(".")$suggests)$name; if (length(suggests) > 0) install.packages(suggests, repos=c("http://cran.rstudio.com"))'
 }
 
+RunTests() {
+  sudo R CMD build .
+  FILE=$(ls -1 *.tar.gz)
+  sudo R CMD INSTALL "${file}" --no-build-vignettes --no-manual
+  }
+
 COMMAND=$1
 echo "Running command ${COMMAND}"
 shift
@@ -62,5 +68,8 @@ case $COMMAND in
     ;;
   "install_deps")
     InstallDeps
+    ;;
+  "run_tests")
+    Runtests
     ;;
 esac
