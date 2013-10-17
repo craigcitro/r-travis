@@ -6,7 +6,10 @@ set -e
 Bootstrap() {
   # Install the dependencies.
   sudo apt-get update -qq
-  sudo apt-get install python-software-properties texlive-full texlive-fonts-extra
+  # sudo apt-get install python-software-properties
+
+  # Install tex.
+  # sudo apt-get install texlive-full texlive-fonts-extra
 
   # Set up our CRAN mirror.
   sudo add-apt-repository "deb http://cran.rstudio.com/bin/linux/ubuntu precise/"
