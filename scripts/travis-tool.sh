@@ -71,6 +71,6 @@ case $COMMAND in
     InstallDeps
     ;;
   "run_tests")
-    Runtests
+    RunTests
     ;;
 esac
