@@ -1,0 +1,14 @@
+# .travis.yml for r-travis.
+#
+# If you're looking to use r-travis with your project, DO NOT USE THIS
+# FILE -- use `sample.travis.yml` instead.
+
+language: c
+script: ./travis-tool.sh run_tests
+before_script:
+  - cp scripts/travis-tool.sh fakepackage
+  - cd fakepackage
+  - ./travis-tool.sh bootstrap
+  - ./travis-tool.sh install_deps
+  - ./travis-tool.sh github_package assertthat
+  - ./travis-tool.sh github_package testthat
