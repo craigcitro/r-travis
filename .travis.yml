@@ -3,7 +3,10 @@
 # If you're looking to use r-travis with your project, DO NOT USE THIS
 # FILE -- use `sample.travis.yml` instead.
 
-language: c
+env:
+  matrix:
+   - language: c
+   - language: objective-c
 script: ./travis-tool.sh run_tests
 before_script:
   - cp scripts/travis-tool.sh fakepackage
