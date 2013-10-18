@@ -54,7 +54,8 @@ RunTests() {
   sudo R CMD build .
   FILE=$(ls -1 *.tar.gz)
   sudo R CMD INSTALL "${file}" --no-build-vignettes --no-manual
-  }
+  exit $?
+}
 
 COMMAND=$1
 echo "Running command ${COMMAND}"
