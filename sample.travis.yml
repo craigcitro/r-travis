@@ -1,4 +1,6 @@
-# THIS FILE IS STILL A TEST
+# Sample .travis.yml for R projects.
+#
+# See README.md for instructions.
 
 language: c
 script: R CMD check . 
@@ -6,5 +8,5 @@ before_script:
   - curl -OL http://raw.github.com/craigcitro/r-travis/master/scripts/travis-tool.sh
   - chmod 755 ./travis-tool.sh
   - ./travis-tool.sh bootstrap
-  - ./travis-tool.sh github_package assertthat
   - ./travis-tool.sh install_deps
+  - ./travis-tool.sh github_package assertthat
