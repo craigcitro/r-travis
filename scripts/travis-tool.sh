@@ -4,10 +4,25 @@
 set -e
 
 Bootstrap() {
-  # Install the dependencies.
-  sudo apt-get update -qq
-  # sudo apt-get install python-software-properties
+  OS=$(uname -s)
+  if [ "DARWIN" == "${OS}" ]; then
+    BootstrapMac
+  elif [ "Linux" == "${OS}" ]; then
+    BootstrapLinux
+  else
+    echo "Unknown OS: ${OS}"
+    exit 1
+  fi
+  
+  # Install devtools.
+  sudo R --slave --vanilla -e 'install.packages(c("devtools"), repos=c("http://cran.rstudio.com"))'
+}
 
+BootstrapLinux() {
+  # Update first.
+  sudo apt-get update -qq
+
+  # TODO(craigcitro): Add this back behind a flag.
   # Install tex.
   # sudo apt-get install texlive-full texlive-fonts-extra
 
@@ -18,9 +33,13 @@ Bootstrap() {
 
   # Install R.
   sudo apt-get install r-base r-base-dev
+}
 
-  # Install devtools.
-  sudo R --slave --vanilla -e 'install.packages(c("devtools"), repos=c("http://cran.rstudio.com"))'
+BootstrapMac() {
+  # TODO(craigcitro): Figure out TeX in OSX+travis.
+
+  # Install R.
+  brew install r
 }
 
 GithubPackage() {
