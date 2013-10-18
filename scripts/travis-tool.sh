@@ -52,8 +52,9 @@ InstallDeps() {
 
 RunTests() {
   sudo R CMD build .
+  echo "files: $(ls -1 *.tar.gz)"
   FILE=$(ls -1 *.tar.gz)
-  sudo R CMD INSTALL "${file}" --no-build-vignettes --no-manual
+  sudo R CMD INSTALL "${FILE}" --no-build-vignettes --no-manual
   exit $?
 }
 
