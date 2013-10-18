@@ -5,7 +5,7 @@ set -e
 
 Bootstrap() {
   OS=$(uname -s)
-  if [ "DARWIN" == "${OS}" ]; then
+  if [ "Darwin" == "${OS}" ]; then
     BootstrapMac
   elif [ "Linux" == "${OS}" ]; then
     BootstrapLinux
