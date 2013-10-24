@@ -72,7 +72,7 @@ InstallDeps() {
 RunTests() {
   sudo R CMD build --no-build-vignettes .
   FILE=$(ls -1 *.tar.gz)
-  sudo R CMD check "${FILE}" --no-manual
+  sudo R CMD check "${FILE}" --no-manual --as-cran
   exit $?
 }
 
