@@ -32,7 +32,7 @@ BootstrapLinux() {
   sudo apt-get update -qq
 
   # Install R.
-  sudo apt-get install r-base r-base-dev
+  sudo apt-get install r-base-dev
 }
 
 BootstrapMac() {
