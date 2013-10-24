@@ -14,8 +14,9 @@ Bootstrap() {
     exit 1
   fi
   
-  # Install devtools.
+  # Install devtools & bootstrap to github version
   sudo R --slave --vanilla -e 'install.packages(c("devtools"), repos=c("http://cran.rstudio.com"))'
+  sudo R --slave --vanilla -e 'library(devtools); install_github("devtools")'
 }
 
 BootstrapLinux() {
@@ -65,8 +66,7 @@ GithubPackage() {
 }
 
 InstallDeps() {
-  sudo R --slave --vanilla -e 'library(devtools); imports <- parse_deps(as.package(".")$imports)$name; if (length(imports) > 0) install.packages(imports, repos=c("http://cran.rstudio.com"))'
-  sudo R --slave --vanilla -e 'library(devtools); suggests <- parse_deps(as.package(".")$suggests)$name; if (length(suggests) > 0) install.packages(suggests, repos=c("http://cran.rstudio.com"))'
+  sudo R --slave --vanilla -e 'library(devtools); options(repos = c(CRAN = "http://cran.rstudio.com")); devtools:::install_deps(dependencies = TRUE)'
 }
 
 RunTests() {
