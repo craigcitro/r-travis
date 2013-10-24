@@ -62,7 +62,7 @@ GithubPackage() {
 
   echo "Installing package: ${PACKAGE_NAME}"
   # Install the package.
-  sudo R --slave --vanilla -e "library(devtools); install_github(\"${PACKAGE_NAME}\"${ARGS})"
+  sudo R --slave --vanilla -e "library(devtools); options(repos = c(CRAN = 'http://cran.rstudio.com')); install_github(\"${PACKAGE_NAME}\"${ARGS})"
 }
 
 InstallDeps() {
