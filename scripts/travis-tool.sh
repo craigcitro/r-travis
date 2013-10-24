@@ -14,8 +14,9 @@ Bootstrap() {
     exit 1
   fi
   
-  # Install devtools.
+  # Install devtools & bootstrap to github version
   sudo R --slave --vanilla -e 'install.packages(c("devtools"), repos=c("http://cran.rstudio.com"))'
+  sudo R --slave --vanilla -e 'library(devtools); install_github("devtools")'
 }
 
 BootstrapLinux() {
@@ -61,18 +62,17 @@ GithubPackage() {
 
   echo "Installing package: ${PACKAGE_NAME}"
   # Install the package.
-  sudo R --slave --vanilla -e "library(devtools); install_github(\"${PACKAGE_NAME}\"${ARGS})"
+  sudo R --slave --vanilla -e "library(devtools); options(repos = c(CRAN = 'http://cran.rstudio.com')); install_github(\"${PACKAGE_NAME}\"${ARGS})"
 }
 
 InstallDeps() {
-  sudo R --slave --vanilla -e 'library(devtools); imports <- parse_deps(as.package(".")$imports)$name; if (length(imports) > 0) install.packages(imports, repos=c("http://cran.rstudio.com"))'
-  sudo R --slave --vanilla -e 'library(devtools); suggests <- parse_deps(as.package(".")$suggests)$name; if (length(suggests) > 0) install.packages(suggests, repos=c("http://cran.rstudio.com"))'
+  sudo R --slave --vanilla -e 'library(devtools); options(repos = c(CRAN = "http://cran.rstudio.com")); devtools:::install_deps(dependencies = TRUE)'
 }
 
 RunTests() {
-  sudo R CMD build .
+  sudo R CMD build --no-build-vignettes .
   FILE=$(ls -1 *.tar.gz)
-  sudo R CMD check "${FILE}" --no-build-vignettes --no-manual
+  sudo R CMD check "${FILE}" --no-manual
   exit $?
 }
 
