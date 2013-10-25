@@ -62,6 +62,15 @@ AptGetInstall() {
     sudo apt-get install $*
 }
 
+RInstall() {
+    if [ "" == "$*" ]; then
+        echo "No arguments"
+        exit 1
+    fi
+
+    sudo R --slave --vanilla -e '"install.packages('"$*"", repos=c('http://cran.rstudio.com'))"
+}
+
 GithubPackage() {
   # An embarrassingly awful script for calling install_github from a
   # .travis.yml.
@@ -104,6 +113,9 @@ case $COMMAND in
     Bootstrap
     ;;
   "aptget_install") 
+    AptGetInstall "$*"
+    ;;
+  "r_install") 
     AptGetInstall "$*"
     ;;
   "github_package")
