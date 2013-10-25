@@ -19,3 +19,10 @@ should be able to set up travis for their own project by:
 My plan is to ultimately merge this into travis as a first-class citizen, so
 that the simplest config would simply say `language: R`. However, I'm using
 this repo as a staging ground to make sure I have the kinks worked out first.
+The end goal would be for the `.travis.yml` for an R project to be something
+as simple as
+
+    language: r
+    github_packages:
+      - assertthat
+      - devtools
