@@ -3,8 +3,9 @@
 
 set -e
 
+OS=$(uname -s)
+
 Bootstrap() {
-  OS=$(uname -s)
   if [ "Darwin" == "${OS}" ]; then
     BootstrapMac
   elif [ "Linux" == "${OS}" ]; then
@@ -25,6 +26,8 @@ BootstrapLinux() {
   # TODO(craigcitro): Add this back behind a flag.
   # Install tex.
   # sudo apt-get install texlive-full texlive-fonts-extra
+  # COMMENT(eddelbuettel): See 'apt-cache show r-base-dev' which
+  #                        pulls in a lot of texlive (though not yet texlive-full)
 
   # Set up our CRAN mirror.
   sudo add-apt-repository "deb http://cran.rstudio.com/bin/linux/ubuntu precise/"
@@ -40,6 +43,23 @@ BootstrapMac() {
 
   # Install R.
   brew install r
+}
+
+AptGetInstall() {
+    # TODO(eddelbuettel): Test and clean up
+
+    if [ "Linux" != "${OS}" ]; then
+        echo "Wrong OS: ${OS}"
+        exit 1
+    fi
+
+    if [ "" == "$*" ]; then
+        echo "No arguments"
+        exit 1
+    fi
+
+    echo "Installing $*"
+    sudo apt-get install $*
 }
 
 GithubPackage() {
@@ -82,6 +102,9 @@ shift
 case $COMMAND in
   "bootstrap")
     Bootstrap
+    ;;
+  "aptget_install") 
+    AptGetInstall() "$*"
     ;;
   "github_package")
     GithubPackage "$*"
