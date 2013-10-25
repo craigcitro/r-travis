@@ -38,7 +38,10 @@ BootstrapLinux() {
   sudo apt-get install r-base-dev littler
 
   # Add user to group staff to write in /usr/local/lib/R/site-library
-  sudo adduser ubuntu staff
+  #sudo adduser ubuntu staff
+  id
+  # shortcut for now
+  sudo chmod 2777 /usr/local/lib/R /usr/local/lib/R/site-library
 }
 
 BootstrapMac() {
