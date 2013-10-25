@@ -104,7 +104,7 @@ case $COMMAND in
     Bootstrap
     ;;
   "aptget_install") 
-    AptGetInstall() "$*"
+    AptGetInstall "$*"
     ;;
   "github_package")
     GithubPackage "$*"
