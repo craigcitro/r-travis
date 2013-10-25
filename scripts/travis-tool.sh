@@ -68,7 +68,10 @@ RInstall() {
         exit 1
     fi
 
-    sudo R --slave --vanilla -e '"install.packages('"$*"", repos=c('http://cran.rstudio.com'))"
+    for pkg in $*; do
+        echo "Installing ${pkg}"
+        sudo R --slave --vanilla -e 'install.packages("'${pkg}'", repos=c("http://cran.rstudio.com"))'
+    done
 }
 
 GithubPackage() {
