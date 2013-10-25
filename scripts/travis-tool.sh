@@ -34,8 +34,11 @@ BootstrapLinux() {
   sudo apt-key adv --keyserver keyserver.ubuntu.com --recv-keys E084DAB9
   sudo apt-get update -qq
 
-  # Install R.
-  sudo apt-get install r-base r-base-dev
+  # Install R as well as littler
+  sudo apt-get install r-base-dev littler
+
+  # Add user to group staff to write in /usr/local/lib/R/site-library
+  sudo adduser ubuntu staff
 }
 
 BootstrapMac() {
@@ -70,7 +73,7 @@ RInstall() {
 
     for pkg in $*; do
         echo "Installing ${pkg}"
-        sudo R --slave --vanilla -e 'install.packages("'${pkg}'", repos=c("http://cran.rstudio.com"))'
+        Rscript -e 'install.packages("'${pkg}'", repos=c("http://cran.rstudio.com"))'
     done
 }
 
