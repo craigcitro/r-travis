@@ -116,7 +116,7 @@ case $COMMAND in
     AptGetInstall "$*"
     ;;
   "r_install") 
-    AptGetInstall "$*"
+    RInstall "$*"
     ;;
   "github_package")
     GithubPackage "$*"
