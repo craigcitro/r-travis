@@ -7,6 +7,7 @@ This package has a simple shell script for use in running R package builds on
 [travis](http://travis-ci.org/), along with a sample `.travis.yml` file. One
 should be able to set up travis for their own project by:
 * Copying `sample.travis.yml` to `.travis.yml` in your project.
+* Adding `.travis.yml` to your `.Rbuildignore`.
 * Modifying `.travis.yml` to list any packages that must be installed from
   github (instead of CRAN).
 * [Turn on travis](https://travis-ci.org/profile) for your project.
