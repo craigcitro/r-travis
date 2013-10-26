@@ -29,8 +29,8 @@ BootstrapLinux() {
     # Install R as well as littler.
     sudo apt-get install r-base-dev littler
 
-    # Add user to group staff to write in /usr/local/lib/R/site-library
-    sudo adduser travis staff
+    # Change permissions for /usr/local/lib/R/site-library
+    sudo chmod 2777 /usr/local/lib/R /usr/local/lib/R/site-library
 
     # Install devtools.
     DevtoolsInstall
@@ -52,7 +52,7 @@ BootstrapMac() {
 DevtoolsInstall() {
     # Install devtools.
     Rscript -e 'install.packages(c("devtools"), repos=c("http://cran.rstudio.com"))'
-    Rscript -e 'library(devtools); install_github("devtools")'
+    Rscript -e 'library(devtools); library(methods); install_github("devtools")'
 }
 
 AptGetInstall() {
@@ -103,7 +103,7 @@ GithubPackage() {
 
     echo "Installing package: ${PACKAGE_NAME}"
     # Install the package.
-    Rscript -e "library(devtools); options(repos = c(CRAN = 'http://cran.rstudio.com')); install_github(\"${PACKAGE_NAME}\"${ARGS})"
+    Rscript -e "library(devtools); library(methods); options(repos = c(CRAN = 'http://cran.rstudio.com')); install_github(\"${PACKAGE_NAME}\"${ARGS})"
 }
 
 InstallDeps() {
