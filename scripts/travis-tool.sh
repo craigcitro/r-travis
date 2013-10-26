@@ -3,8 +3,9 @@
 
 set -e
 
+OS=$(uname -s)
+
 Bootstrap() {
-  OS=$(uname -s)
   if [ "Darwin" == "${OS}" ]; then
     BootstrapMac
   elif [ "Linux" == "${OS}" ]; then
@@ -13,27 +14,22 @@ Bootstrap() {
     echo "Unknown OS: ${OS}"
     exit 1
   fi
-  
-  # Install devtools & bootstrap to github version
-  sudo R --slave --vanilla -e 'install.packages(c("devtools"), repos=c("http://cran.rstudio.com"))'
-  sudo R --slave --vanilla -e 'library(devtools); install_github("devtools")'
 }
 
 BootstrapLinux() {
   # Update first.
   sudo apt-get update -qq
 
-  # TODO(craigcitro): Add this back behind a flag.
-  # Install tex.
-  # sudo apt-get install texlive-full texlive-fonts-extra
-
   # Set up our CRAN mirror.
   sudo add-apt-repository "deb http://cran.rstudio.com/bin/linux/ubuntu precise/"
   sudo apt-key adv --keyserver keyserver.ubuntu.com --recv-keys E084DAB9
   sudo apt-get update -qq
 
-  # Install R.
-  sudo apt-get install r-base-dev
+  # Install R as well as littler.
+  sudo apt-get install r-base-dev littler
+
+  # Add user to group staff to write in /usr/local/lib/R/site-library
+  sudo adduser travis staff
 }
 
 BootstrapMac() {
@@ -41,6 +37,41 @@ BootstrapMac() {
 
   # Install R.
   brew install r
+}
+
+DevtoolsInstall() {
+    # Install devtools.
+    Rscript -e 'install.packages(c("devtools"), repos=c("http://cran.rstudio.com"))'
+    Rscript -e 'library(devtools); install_github("devtools")'
+}
+
+AptGetInstall() {
+    # TODO(eddelbuettel): Test and clean up
+
+    if [ "Linux" != "${OS}" ]; then
+        echo "Wrong OS: ${OS}"
+        exit 1
+    fi
+
+    if [ "" == "$*" ]; then
+        echo "No arguments"
+        exit 1
+    fi
+
+    echo "Installing $*"
+    sudo apt-get install $*
+}
+
+RInstall() {
+    if [ "" == "$*" ]; then
+        echo "No arguments"
+        exit 1
+    fi
+
+    for pkg in $*; do
+        echo "Installing ${pkg}"
+        Rscript -e 'install.packages("'${pkg}'", repos=c("http://cran.rstudio.com"))'
+    done
 }
 
 GithubPackage() {
@@ -62,34 +93,44 @@ GithubPackage() {
 
   echo "Installing package: ${PACKAGE_NAME}"
   # Install the package.
-  sudo R --slave --vanilla -e "library(devtools); options(repos = c(CRAN = 'http://cran.rstudio.com')); install_github(\"${PACKAGE_NAME}\"${ARGS})"
+  Rscript -e "library(devtools); options(repos = c(CRAN = 'http://cran.rstudio.com')); install_github(\"${PACKAGE_NAME}\"${ARGS})"
 }
 
 InstallDeps() {
-  sudo R --slave --vanilla -e 'library(devtools); options(repos = c(CRAN = "http://cran.rstudio.com")); devtools:::install_deps(dependencies = TRUE)'
+    Rscript -e 'library(devtools); imports <- parse_deps(as.package(".")$imports)$name; if (length(imports) > 0) install.packages(imports, repos=c("http://cran.rstudio.com"))'
+    Rscript -e 'library(devtools); suggests <- parse_deps(as.package(".")$suggests)$name; if (length(suggests) > 0) install.packages(suggests, repos=c("http://cran.rstudio.com"))'
 }
 
 RunTests() {
-  sudo R CMD build --no-build-vignettes .
-  FILE=$(ls -1 *.tar.gz)
-  sudo R CMD check "${FILE}" --no-manual --as-cran
-  exit $?
+    R CMD build --no-build-vignettes .
+    FILE=$(ls -1 *.tar.gz)
+    R CMD check "${FILE}" --no-manual --as-cran
+    exit $?
 }
 
 COMMAND=$1
 echo "Running command ${COMMAND}"
 shift
 case $COMMAND in
-  "bootstrap")
-    Bootstrap
-    ;;
-  "github_package")
-    GithubPackage "$*"
-    ;;
-  "install_deps")
-    InstallDeps
-    ;;
-  "run_tests")
-    RunTests
-    ;;
+    "bootstrap")
+        Bootstrap
+        ;;
+    "devtools_install") 
+        DevtoolsInstall 
+        ;;
+    "aptget_install") 
+        AptGetInstall "$*"
+        ;;
+    "r_install") 
+        RInstall "$*"
+        ;;
+    "github_package")
+        GithubPackage "$*"
+        ;;
+    "install_deps")
+        InstallDeps
+        ;;
+    "run_tests")
+        RunTests
+        ;;
 esac
