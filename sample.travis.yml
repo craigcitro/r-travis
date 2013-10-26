@@ -10,3 +10,13 @@ before_script:
   - ./travis-tool.sh bootstrap
   - ./travis-tool.sh install_deps
   - ./travis-tool.sh github_package assertthat
+# Configuration options below this line are suggested options.
+notifications:
+  email:
+    on_success: change
+    on_failure: change
+# One can also restrict the branches to test, see
+#   http://about.travis-ci.org/docs/user/build-configuration/#Specify-branches-to-build
+branches:
+  only:
+    - master
