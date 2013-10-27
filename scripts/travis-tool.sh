@@ -16,6 +16,8 @@ Bootstrap() {
         echo "Unknown OS: ${OS}"
         exit 1
     fi
+
+    echo '^travis-tool\.sh$' >> .Rbuildignore
 }
 
 BootstrapLinux() {
