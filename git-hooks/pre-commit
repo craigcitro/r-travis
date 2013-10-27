@@ -1,0 +1,20 @@
+#!/bin/sh
+# -*- mode: sh-mode; -*-
+#
+# pre-commit hooks for r-travis.
+
+# validate the two travis yaml files; requires travis-lint:
+#   http://github.com/travis-ci/travis-lint
+
+RunTravisLint() {
+  travis-lint $1 >/dev/null
+  if [[ "$?" -ne 0 ]]; then
+    echo "Error running travis-lint on $1:"
+    travis-lint $1
+    exit $?
+  fi
+  shift
+}
+
+RunTravisLint .travis.yml
+RunTravisLint sample.travis.yml
