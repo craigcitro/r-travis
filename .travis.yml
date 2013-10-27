@@ -17,6 +17,10 @@ before_install:
   - ./travis-tool.sh bootstrap
 install:
   - ./travis-tool.sh install_deps
+  # TODO(craigcitro): This line is nonsense; it's just used to test
+  # that apt package installation works, since tmux is tiny and has no
+  # dependencies. ;) Once we have a binary CRAN repo set up by default,
+  # switch this to something more relevant.
   - ./travis-tool.sh aptget_install tmux
   - ./travis-tool.sh github_package assertthat
   - ./travis-tool.sh github_package testthat
