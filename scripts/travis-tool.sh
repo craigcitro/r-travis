@@ -22,7 +22,7 @@ BootstrapLinux() {
     sudo apt-get update -qq
 
     # Set up our CRAN mirror.
-    sudo add-apt-repository "deb http://cran.rstudio.com/bin/linux/ubuntu `lsb_release -cs`/"
+    sudo add-apt-repository "deb http://cran.rstudio.com/bin/linux/ubuntu $(lsb_release -cs)/"
     sudo apt-key adv --keyserver keyserver.ubuntu.com --recv-keys E084DAB9
     sudo apt-get update -qq
 
