@@ -1,6 +1,6 @@
 # R+Travis
 
-[![Build Status](https://travis-ci.org/craigcitro/r-travis.png?branch=master)](https://travis-ci.org/craigcitro/r-travis)
+[![Build Status](https://travis-ci.org/craigcitro/r-travis.png?branch=master,osx)](https://travis-ci.org/craigcitro/r-travis)
 
 This package has a simple shell script for use in running R package builds on
 [travis](http://travis-ci.org/), along with a sample `.travis.yml` file. One
