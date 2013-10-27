@@ -19,12 +19,11 @@ Bootstrap() {
 }
 
 BootstrapLinux() {
-    # Update first.
-    sudo apt-get update -qq
-
     # Set up our CRAN mirror.
     sudo add-apt-repository "deb http://cran.rstudio.com/bin/linux/ubuntu $(lsb_release -cs)/"
     sudo apt-key adv --keyserver keyserver.ubuntu.com --recv-keys E084DAB9
+
+    # Update only once, after adding all repositories.
     sudo apt-get update -qq
 
     # Install R (but not yet littler)
@@ -63,7 +62,7 @@ AptGetInstall() {
         exit 1
     fi
 
-    echo "Installing $*"
+    echo "AptGetInstall: Installing $*"
     sudo apt-get install $*
 }
 
@@ -73,10 +72,8 @@ RInstall() {
         exit 1
     fi
 
-    for pkg in $*; do
-        echo "Installing ${pkg}"
-        Rscript -e 'install.packages("'${pkg}'", repos=c("http://cran.rstudio.com"))'
-    done
+    echo "RInstall: Installing ${pkg}"
+    Rscript -e 'install.packages(commandArgs(TRUE), repos=c("http://cran.rstudio.com"))' --args $*
 }
 
 GithubPackage() {
