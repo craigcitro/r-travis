@@ -5,6 +5,7 @@
 set -e
 
 OS=$(uname -s)
+HaveDevtools="no"
 
 Bootstrap() {
     if [ "Darwin" == "${OS}" ]; then
@@ -31,9 +32,6 @@ BootstrapLinux() {
 
     # Change permissions for /usr/local/lib/R/site-library
     sudo chmod 2777 /usr/local/lib/R /usr/local/lib/R/site-library
-
-    # Install devtools.
-    DevtoolsInstall
 }
 
 BootstrapMac() {
@@ -44,23 +42,17 @@ BootstrapMac() {
 
     echo "Installing OS X binary package for R"
     sudo installer -pkg "/tmp/R-latest.pkg" -target /
-
-    # Install devtools.
-    DevtoolsInstall
 }
 
-# TODO(craigcitro): Consider making this optional (based on
-# [comments](https://github.com/craigcitro/r-travis/pull/17)), and if
-# so remove the installation calls in the `Bootstrap*` functions.
 DevtoolsInstall() {
     # Install devtools.
     Rscript -e 'install.packages(c("devtools"), repos=c("http://cran.rstudio.com"))'
     Rscript -e 'library(devtools); library(methods); install_github("devtools")'
+    # Mark installation
+    HaveDevtools="yes"
 }
 
 AptGetInstall() {
-    # TODO(eddelbuettel): Test and clean up
-    
     if [ "Linux" != "${OS}" ]; then
         echo "Wrong OS: ${OS}"
         exit 1
@@ -94,6 +86,10 @@ GithubPackage() {
     # Note that bash quoting makes this annoying for any additional
     # arguments.
 
+    if [ "no" == "${HaveDevtools}" ]; then
+        DevtoolsInstall
+    fi
+
     # Get the package name and strip it
     PACKAGE_NAME=$1
     shift
@@ -110,6 +106,10 @@ GithubPackage() {
 }
 
 InstallDeps() {
+    if [ "no" == "${HaveDevtools}" ]; then
+        DevtoolsInstall
+    fi
+
     Rscript -e 'library(devtools); library(methods); options(repos = c(CRAN = "http://cran.rstudio.com")); devtools:::install_deps(dependencies = TRUE)'
 }
 
