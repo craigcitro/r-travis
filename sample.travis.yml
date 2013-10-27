@@ -3,6 +3,8 @@
 # See README.md for instructions.
 
 language: c
+# To build on OSX, switch the previous line to
+# language: objective-c
 script: ./travis-tool.sh run_tests
 before_install:
   - curl -OL http://raw.github.com/craigcitro/r-travis/master/scripts/travis-tool.sh

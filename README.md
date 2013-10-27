@@ -15,9 +15,12 @@ should be able to set up travis for their own project by:
 
 ## Linux or OS X builds
 
-By default, builds are done on Linux. That is enabled by choosing language: c in the .travis.yml file. Builds on OS X can be enabled by choosing language: objective-c.  See the comments in the .travis.yml file.
+By default, builds are done on Linux. That is enabled by choosing
+`language: c` in the .travis.yml file. Builds on OS X can be enabled by
+choosing `language: objective-c`. See the comments in `sample.travis.yml`.
 
-Currently, Travis-CI does not support builds that loop over platforms (such as Linux and OS X) in one build. 
+Currently, Travis-CI does not support builds that loop over platforms (such as
+Linux and OS X) in one build.
 
 ## The future
 
