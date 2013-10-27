@@ -14,6 +14,12 @@ should be able to set up travis for their own project by:
 * Add a [travis shield](http://about.travis-ci.org/docs/user/status-images/)
   to your `README` file.
 
+## Linux or OS X builds
+
+By default, builds are done on Linux. That is enabled by choosing language: c in the .travis.yml file. Builds on OS X can be enabled by choosing language: objective-c.  See the comments in the .travis.yml file.
+
+Currently, Travis-CI does not support builds that loop over platforms (such as Linux and OS X) in one build. 
+
 ## The future
 
 My plan is to ultimately merge this into travis as a first-class citizen, so

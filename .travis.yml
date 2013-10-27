@@ -3,7 +3,10 @@
 # If you're looking to use r-travis with your project, DO NOT USE THIS
 # FILE -- use `sample.travis.yml` instead.
 
-language: c
+#TODO(petrifast): Uncomment the "language: objective-c" line and comment out the "language: c" line + the tmux line below to build on OSX
+#language: c
+language: objective-c
+
 script: ./travis-tool.sh run_tests
 notifications:
   email:
@@ -14,6 +17,7 @@ before_script:
   - cd fakepackage
   - ./travis-tool.sh bootstrap
   - ./travis-tool.sh install_deps
-  - ./travis-tool.sh aptget_install tmux
+  #  TODO(petrifast): comment out the next line (tmux) from an OS X build
+  # - ./travis-tool.sh aptget_install tmux
   - ./travis-tool.sh github_package assertthat
   - ./travis-tool.sh github_package testthat
