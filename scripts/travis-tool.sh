@@ -107,7 +107,7 @@ GithubPackage() {
 }
 
 InstallDeps() {
-    Rscript -e 'library(devtools); options(repos = c(CRAN = "http://cran.rstudio.com")); devtools:::install_deps(dependencies = TRUE)'
+    Rscript -e 'library(devtools); library(methods); options(repos = c(CRAN = "http://cran.rstudio.com")); devtools:::install_deps(dependencies = TRUE)'
 }
 
 RunTests() {
