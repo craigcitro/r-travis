@@ -26,8 +26,8 @@ BootstrapLinux() {
     sudo apt-key adv --keyserver keyserver.ubuntu.com --recv-keys E084DAB9
     sudo apt-get update -qq
 
-    # Install R as well as littler.
-    sudo apt-get install r-base-dev littler
+    # Install R (but not yet littler)
+    sudo apt-get install r-base-dev 
 
     # Change permissions for /usr/local/lib/R/site-library
     sudo chmod 2777 /usr/local/lib/R /usr/local/lib/R/site-library
