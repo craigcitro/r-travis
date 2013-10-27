@@ -5,7 +5,7 @@
 set -e
 
 OS=$(uname -s)
-HaveDevtools="no"
+HAVE_DEVTOOLS="no"
 
 Bootstrap() {
     if [ "Darwin" == "${OS}" ]; then
@@ -49,7 +49,7 @@ DevtoolsInstall() {
     Rscript -e 'install.packages(c("devtools"), repos=c("http://cran.rstudio.com"))'
     Rscript -e 'library(devtools); library(methods); install_github("devtools")'
     # Mark installation
-    HaveDevtools="yes"
+    HAVE_DEVTOOLS="yes"
 }
 
 AptGetInstall() {
@@ -86,7 +86,7 @@ GithubPackage() {
     # Note that bash quoting makes this annoying for any additional
     # arguments.
 
-    if [ "no" == "${HaveDevtools}" ]; then
+    if [ "no" == "${HAVE_DEVTOOLS}" ]; then
         DevtoolsInstall
     fi
 
@@ -106,7 +106,7 @@ GithubPackage() {
 }
 
 InstallDeps() {
-    if [ "no" == "${HaveDevtools}" ]; then
+    if [ "no" == "${HAVE_DEVTOOLS}" ]; then
         DevtoolsInstall
     fi
 
