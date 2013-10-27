@@ -4,8 +4,8 @@
 # FILE -- use `sample.travis.yml` instead.
 
 #TODO(petrifast): Uncomment the "language: objective-c" line and comment out the "language: c" line + the tmux line below to build on OSX
-language: c
-#language: objective-c
+# language: c
+language: objective-c
 
 script: ./travis-tool.sh run_tests
 notifications:
@@ -19,6 +19,6 @@ before_install:
 install:
   - ./travis-tool.sh install_deps
   #  TODO(petrifast): comment out the next line (tmux) from an OS X build
-  - ./travis-tool.sh aptget_install tmux
+  # - ./travis-tool.sh aptget_install tmux
   - ./travis-tool.sh github_package assertthat
   - ./travis-tool.sh github_package testthat
