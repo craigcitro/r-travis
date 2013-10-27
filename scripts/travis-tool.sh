@@ -37,12 +37,19 @@ BootstrapLinux() {
 }
 
 BootstrapMac() {
-    # TODO(craigcitro): Figure out TeX in OSX+travis.
+   # TODO(craigcitro): Figure out TeX in OSX+travis.
 
+    # (petrifast) Commented out homebrew installation. Install from a binary instead.
     # Install R.
-    brew install r
+    #brew install r
 
-    # Install devtools.
+    # Install from latest CRAN binary build for OS X
+    wget http://cran.r-project.org/bin/macosx/R-latest.pkg  -O /tmp/R-latest.pkg
+
+    echo "Installing OS X binary package for R"
+    sudo installer -pkg "/tmp/R-latest.pkg" -target /
+
+    ## Install devtools.
     DevtoolsInstall
 }
 
