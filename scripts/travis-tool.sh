@@ -71,7 +71,7 @@ AptGetInstall() {
         exit 1
     fi
 
-    echo "Installing $*"
+    echo "AptGetInstall: Installing $*"
     sudo apt-get install $*
 }
 
@@ -81,10 +81,8 @@ RInstall() {
         exit 1
     fi
 
-    for pkg in $*; do
-        echo "Installing ${pkg}"
-        Rscript -e 'install.packages("'${pkg}'", repos=c("http://cran.rstudio.com"))'
-    done
+    echo "RInstall: Installing ${pkg}"
+    Rscript -e 'install.packages(commandArgs(TRUE), repos=c("http://cran.rstudio.com"))' --args $*
 }
 
 GithubPackage() {
