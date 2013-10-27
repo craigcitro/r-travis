@@ -8,6 +8,8 @@ OS=$(uname -s)
 HAVE_DEVTOOLS="no"
 
 Bootstrap() {
+    RTRAVIS_CRAN_URL=${RTRAVIS_CRAN_URL:-"http://cran.rstudio.com"}
+
     if [ "Darwin" == "${OS}" ]; then
         BootstrapMac
     elif [ "Linux" == "${OS}" ]; then
@@ -18,11 +20,13 @@ Bootstrap() {
     fi
 
     echo '^travis-tool\.sh$' >> .Rbuildignore
+
+    echo "options(repos = c(CRAN = '"${RTRAVIS_CRAN_URL}"'))" | sudo tee /usr/lib/R/etc/Rprofile.site
 }
 
 BootstrapLinux() {
     # Set up our CRAN mirror.
-    sudo add-apt-repository "deb http://cran.rstudio.com/bin/linux/ubuntu $(lsb_release -cs)/"
+    sudo add-apt-repository "deb ${RTRAVIS_CRAN_URL}/bin/linux/ubuntu $(lsb_release -cs)/"
     sudo apt-key adv --keyserver keyserver.ubuntu.com --recv-keys E084DAB9
 
     # Update after adding all repositories.
@@ -39,7 +43,7 @@ BootstrapMac() {
     # TODO(craigcitro): Figure out TeX in OSX+travis.
 
     # Install from latest CRAN binary build for OS X
-    wget http://cran.r-project.org/bin/macosx/R-latest.pkg  -O /tmp/R-latest.pkg
+    wget ${RTRAVIS_CRAN_URL}/bin/macosx/R-latest.pkg  -O /tmp/R-latest.pkg
 
     echo "Installing OS X binary package for R"
     sudo installer -pkg "/tmp/R-latest.pkg" -target /
@@ -47,7 +51,7 @@ BootstrapMac() {
 
 DevtoolsInstall() {
     # Install devtools.
-    Rscript -e 'install.packages(c("devtools"), repos=c("http://cran.rstudio.com"))'
+    Rscript -e 'install.packages(c("devtools"))'
     Rscript -e 'library(devtools); library(methods); install_github("devtools")'
     # Mark installation
     HAVE_DEVTOOLS="yes"
@@ -75,7 +79,7 @@ RInstall() {
     fi
 
     echo "RInstall: Installing ${pkg}"
-    Rscript -e 'install.packages(commandArgs(TRUE), repos=c("http://cran.rstudio.com"))' --args $*
+    Rscript -e 'install.packages(commandArgs(TRUE))' --args $*
 }
 
 GithubPackage() {
@@ -101,7 +105,7 @@ GithubPackage() {
 
     echo "Installing package: ${PACKAGE_NAME}"
     # Install the package.
-    Rscript -e "library(devtools); library(methods); options(repos = c(CRAN = 'http://cran.rstudio.com')); install_github(\"${PACKAGE_NAME}\"${ARGS})"
+    Rscript -e "library(devtools); library(methods); install_github(\"${PACKAGE_NAME}\"${ARGS})"
 }
 
 InstallDeps() {
@@ -109,7 +113,7 @@ InstallDeps() {
         DevtoolsInstall
     fi
 
-    Rscript -e 'library(devtools); library(methods); options(repos = c(CRAN = "http://cran.rstudio.com")); devtools:::install_deps(dependencies = TRUE)'
+    Rscript -e 'library(devtools); library(methods); devtools:::install_deps(dependencies = TRUE)'
 }
 
 RunTests() {
