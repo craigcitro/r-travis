@@ -18,12 +18,11 @@ Bootstrap() {
 }
 
 BootstrapLinux() {
-    # Update first.
-    sudo apt-get update -qq
-
     # Set up our CRAN mirror.
     sudo add-apt-repository "deb http://cran.rstudio.com/bin/linux/ubuntu $(lsb_release -cs)/"
     sudo apt-key adv --keyserver keyserver.ubuntu.com --recv-keys E084DAB9
+
+    # Update only once, after adding all repositories.
     sudo apt-get update -qq
 
     # Install R as well as littler.
