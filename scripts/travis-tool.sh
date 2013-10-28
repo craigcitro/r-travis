@@ -126,8 +126,7 @@ case $COMMAND in
         Bootstrap
         ;;
     "devtools_install")
-        # TODO(craigcitro): Make this a noop, then delete it.
-        EnsureDevtools
+        # TODO(craigcitro): Delete this function, since we don't need it.
         ;;
     "aptget_install") 
         AptGetInstall "$*"
