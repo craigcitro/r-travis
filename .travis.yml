@@ -23,6 +23,6 @@ install:
   # switch this to something more relevant.
   - ./travis-tool.sh aptget_install tmux
   # Test r_install (which accepts multiple arguments).
-  - ./travis-tool.sh r_install BBmisc Hmisc
+  - ./travis-tool.sh r_install stringr lubridate
   - ./travis-tool.sh github_package assertthat
   - ./travis-tool.sh github_package testthat

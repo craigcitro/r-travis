@@ -1,5 +1,9 @@
 context("fake")
 
+# We want to make sure these installed.
+library(lubridate)
+library(stringr)
+
 test_that("returns 3", {
   expect_equal(3, three())
 })
