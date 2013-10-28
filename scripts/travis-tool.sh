@@ -102,7 +102,7 @@ GithubPackage() {
 
     echo "Installing package: ${PACKAGE_NAME}"
     # Install the package.
-    Rscript -e '"library(devtools); library(methods); options(repos = c(CRAN = \"'"${CRAN}"'\")); install_github(\"${PACKAGE_NAME}\"${ARGS})"'
+    Rscript -e '"library(devtools); library(methods); options(repos=c(CRAN=\"'"${CRAN}"'\")); install_github(\"'"${PACKAGE_NAME}"'\"'"${ARGS}"')"'
 }
 
 InstallDeps() {
