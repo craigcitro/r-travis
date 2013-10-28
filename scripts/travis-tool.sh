@@ -48,8 +48,8 @@ BootstrapMac() {
 
 DevtoolsInstall() {
     # Install devtools.
-    Rscript -e "install.packages(\"devtools\", repos=\"${CRAN}\")"
-    Rscript -e "library(devtools); library(methods); install_github(\"devtools\")"
+    Rscript -e '"install.packages(\"devtools\", repos=\"'"${CRAN}"'\")"'
+    Rscript -e '"library(devtools); library(methods); install_github(\"devtools\")"'
     # Mark installation
     HAVE_DEVTOOLS="yes"
 }
@@ -76,7 +76,7 @@ RInstall() {
     fi
 
     echo "RInstall: Installing ${pkg}"
-    Rscript -e "install.packages(commandArgs(TRUE), repos=\"${CRAN}\")" $*
+    Rscript -e '"install.packages(commandArgs(TRUE), repos=\"'"${CRAN}"'\")"' $*
 }
 
 GithubPackage() {
@@ -102,7 +102,7 @@ GithubPackage() {
 
     echo "Installing package: ${PACKAGE_NAME}"
     # Install the package.
-    Rscript -e "library(devtools); library(methods); options(repos = c(CRAN = \"${CRAN}\")); install_github(\"${PACKAGE_NAME}\"${ARGS})"
+    Rscript -e '"library(devtools); library(methods); options(repos = c(CRAN = \"'"${CRAN}"'\")); install_github(\"${PACKAGE_NAME}\"${ARGS})"'
 }
 
 InstallDeps() {
@@ -110,7 +110,7 @@ InstallDeps() {
         DevtoolsInstall
     fi
 
-    Rscript -e 'library(devtools); library(methods); options(repos = c(CRAN = \"${CRAN}\")); devtools:::install_deps(dependencies = TRUE)'
+    Rscript -e '"library(devtools); library(methods); options(repos = c(CRAN = \"'"${CRAN}"'\")); devtools:::install_deps(dependencies = TRUE)"'
 }
 
 RunTests() {
