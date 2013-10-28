@@ -6,10 +6,9 @@ set -e
 
 OS=$(uname -s)
 HAVE_DEVTOOLS="no"
+CRAN=${CRAN:-"http://cran.rstudio.com"}    
 
 Bootstrap() {
-    RTRAVIS_CRAN_URL=${RTRAVIS_CRAN_URL:-"http://cran.rstudio.com"}
-
     if [ "Darwin" == "${OS}" ]; then
         BootstrapMac
     elif [ "Linux" == "${OS}" ]; then
@@ -18,24 +17,22 @@ Bootstrap() {
         echo "Unknown OS: ${OS}"
         exit 1
     fi
-
-    echo '^travis-tool\.sh$' >> .Rbuildignore
-
-    echo "options(repos = c(CRAN = '"${RTRAVIS_CRAN_URL}"'))" | sudo tee /usr/lib/R/etc/Rprofile.site
 }
 
 BootstrapLinux() {
     # Set up our CRAN mirror.
-    sudo add-apt-repository "deb ${RTRAVIS_CRAN_URL}/bin/linux/ubuntu $(lsb_release -cs)/"
+    sudo add-apt-repository "deb ${CRAN}/bin/linux/ubuntu $(lsb_release -cs)/"
     sudo apt-key adv --keyserver keyserver.ubuntu.com --recv-keys E084DAB9
 
     # Update after adding all repositories.
     sudo apt-get update -qq
 
-    # Install R (but not yet littler)
+    # Install an R development environment
     sudo apt-get install r-base-dev 
 
     # Change permissions for /usr/local/lib/R/site-library
+    # This should really be via 'staff adduser travis staff' 
+    # but that may affect only the next shell
     sudo chmod 2777 /usr/local/lib/R /usr/local/lib/R/site-library
 }
 
@@ -43,7 +40,7 @@ BootstrapMac() {
     # TODO(craigcitro): Figure out TeX in OSX+travis.
 
     # Install from latest CRAN binary build for OS X
-    wget ${RTRAVIS_CRAN_URL}/bin/macosx/R-latest.pkg  -O /tmp/R-latest.pkg
+    wget ${CRAN}/bin/macosx/R-latest.pkg  -O /tmp/R-latest.pkg
 
     echo "Installing OS X binary package for R"
     sudo installer -pkg "/tmp/R-latest.pkg" -target /
@@ -51,7 +48,7 @@ BootstrapMac() {
 
 DevtoolsInstall() {
     # Install devtools.
-    Rscript -e 'install.packages(c("devtools"))'
+    Rscript -e 'install.packages("devtools", repos="'"${CRAN}"'")'
     Rscript -e 'library(devtools); library(methods); install_github("devtools")'
     # Mark installation
     HAVE_DEVTOOLS="yes"
@@ -79,7 +76,7 @@ RInstall() {
     fi
 
     echo "RInstall: Installing ${pkg}"
-    Rscript -e 'install.packages(commandArgs(TRUE))' --args $*
+    Rscript -e 'install.packages(commandArgs(TRUE), repos="'"${CRAN}"'")' $*
 }
 
 GithubPackage() {
@@ -105,7 +102,7 @@ GithubPackage() {
 
     echo "Installing package: ${PACKAGE_NAME}"
     # Install the package.
-    Rscript -e "library(devtools); library(methods); install_github(\"${PACKAGE_NAME}\"${ARGS})"
+    Rscript -e 'library(devtools); library(methods); options(repos=c(CRAN="'"${CRAN}"'")); install_github("'"${PACKAGE_NAME}"'"'"${ARGS}"')'
 }
 
 InstallDeps() {
@@ -113,7 +110,7 @@ InstallDeps() {
         DevtoolsInstall
     fi
 
-    Rscript -e 'library(devtools); library(methods); devtools:::install_deps(dependencies = TRUE)'
+    Rscript -e 'library(devtools); library(methods); options(repos=c(CRAN="'"${CRAN}"'")); devtools:::install_deps(dependencies = TRUE)'
 }
 
 RunTests() {
