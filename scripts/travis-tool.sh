@@ -48,8 +48,8 @@ BootstrapMac() {
 
 DevtoolsInstall() {
     # Install devtools.
-    Rscript -e 'install.packages("devtools", repos="${CRAN}")'
-    Rscript -e 'library(devtools); library(methods); install_github("devtools")'
+    Rscript -e "install.packages(\"devtools\", repos=\"${CRAN}\")"
+    Rscript -e "library(devtools); library(methods); install_github(\"devtools\")"
     # Mark installation
     HAVE_DEVTOOLS="yes"
 }
@@ -76,7 +76,7 @@ RInstall() {
     fi
 
     echo "RInstall: Installing ${pkg}"
-    Rscript -e 'install.packages(commandArgs(TRUE), repos="${CRAN}")' --args $*
+    Rscript -e "install.packages(commandArgs(TRUE), repos=\"${CRAN}\")" $*
 }
 
 GithubPackage() {
