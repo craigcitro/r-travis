@@ -46,12 +46,15 @@ BootstrapMac() {
 }
 
 EnsureDevtools() {
+    set +e
     Rscript -e 'if (!("devtools" %in% rownames(installed.packages()))) q(status=1)'
     if [[ $? -ne 0 ]]; then
+        set -e
         # Install devtools.
         Rscript -e 'install.packages("devtools", repos="'"${CRAN}"'")'
         Rscript -e 'library(devtools); library(methods); install_github("devtools")'
     fi
+    set -e
 }
 
 AptGetInstall() {
