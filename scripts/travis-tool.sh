@@ -46,15 +46,11 @@ BootstrapMac() {
 }
 
 EnsureDevtools() {
-    set +e
-    Rscript -e 'if (!("devtools" %in% rownames(installed.packages()))) q(status=1)'
-    if [[ $? -ne 0 ]]; then
-        set -e
+    if ! Rscript -e 'if (!("devtools" %in% rownames(installed.packages()))) q(status=1)' ; then
         # Install devtools.
         Rscript -e 'install.packages("devtools", repos="'"${CRAN}"'")'
         Rscript -e 'library(devtools); library(methods); install_github("devtools")'
     fi
-    set -e
 }
 
 AptGetInstall() {
@@ -127,6 +123,7 @@ case $COMMAND in
         ;;
     "devtools_install")
         # TODO(craigcitro): Delete this function, since we don't need it.
+        echo '***** devtools_install is deprecated and will soon disappear. *****'
         ;;
     "aptget_install") 
         AptGetInstall "$*"
