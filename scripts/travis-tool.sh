@@ -17,6 +17,11 @@ Bootstrap() {
         echo "Unknown OS: ${OS}"
         exit 1
     fi
+
+    test -e .Rbuildignore && grep -q 'travis-tool' .Rbuildignore
+    if [[ $? -ne 0 ]]; then
+        echo '^travis-tool\.sh$' >>.Rbuildignore
+    fi
 }
 
 BootstrapLinux() {
