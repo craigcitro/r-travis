@@ -21,7 +21,8 @@ install:
   #
   # The following lines exist to test various features of our travis
   # scripts; don't use these as a model for other `.travis.yml` files.
-  - ./travis-tool.sh aptget_install tmux
+  # Test aptget_install with multiple arguments.
+  - ./travis-tool.sh aptget_install tmux psmisc
   # Test r_install (which accepts multiple arguments).
   - ./travis-tool.sh r_install stringr lubridate
   - Rscript -e 'library(stringr); library(lubridate)'
