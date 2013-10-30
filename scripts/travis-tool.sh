@@ -56,8 +56,12 @@ BootstrapMac() {
 EnsureDevtools() {
     if ! Rscript -e 'if (!("devtools" %in% rownames(installed.packages()))) q(status=1)' ; then
         # Install devtools and testthat.
-        RBinaryInstall devtools
-        RBinaryInstall testthat
+        if [ "Linux" == "${OS}" ]; then
+            RBinaryInstall devtools
+            RBinaryInstall testthat
+        else
+            RInstall devtools testthat
+        fi
         # Bootstrap devtools to the live version on github.
         Rscript -e 'library(devtools); library(methods); install_github("devtools")'
     fi
@@ -70,7 +74,7 @@ AptGetInstall() {
     fi
 
     if [ "" == "$*" ]; then
-        echo "No arguments"
+        echo "No arguments to aptget_install"
         exit 1
     fi
 
@@ -80,7 +84,7 @@ AptGetInstall() {
 
 RInstall() {
     if [ "" == "$*" ]; then
-        echo "No arguments"
+        echo "No arguments to r_install"
         exit 1
     fi
 
@@ -89,6 +93,16 @@ RInstall() {
 }
 
 RBinaryInstall() {
+    if [ "Linux" != "${OS}" ]; then
+        echo "Wrong OS: ${OS}"
+        exit 1
+    fi
+
+    if [ "" == "$*" ]; then
+        echo "No arguments to r_binary_install"
+        exit 1
+    fi
+
     r_package=$(echo "$1" | tr '[:upper:]' '[:lower:]')
     shift
     echo "Installing *binary* R package: ${r_package}"
