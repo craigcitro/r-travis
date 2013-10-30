@@ -57,8 +57,7 @@ EnsureDevtools() {
     if ! Rscript -e 'if (!("devtools" %in% rownames(installed.packages()))) q(status=1)' ; then
         # Install devtools and testthat.
         if [ "Linux" == "${OS}" ]; then
-            RBinaryInstall devtools
-            RBinaryInstall testthat
+            RBinaryInstall devtools testthat
         else
             RInstall devtools testthat
         fi
@@ -103,7 +102,7 @@ RBinaryInstall() {
         exit 1
     fi
 
-    for r_package in $*; do
+    for r_package in $@; do
         r_package=$(echo "$1" | tr '[:upper:]' '[:lower:]')
         shift
         echo "Installing *binary* R package: ${r_package}"
