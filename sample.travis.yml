@@ -20,6 +20,9 @@ notifications:
     on_failure: change
 # One can also restrict the branches to test, see
 #   http://about.travis-ci.org/docs/user/build-configuration/#Specify-branches-to-build
+# This example tests all branches except those with suffix -expt ("experimental").
+# Note that in general it is advisable to test (almost) all branches in order to
+# automatically test pending pull requests.
 branches:
   except:
     - /-expt$/
