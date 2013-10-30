@@ -29,4 +29,4 @@ install:
   - ./travis-tool.sh github_package assertthat
   - ./travis-tool.sh github_package testthat
   - ./travis-tool.sh r_binary_install RUnit
-  - Rscript -e 'library(survey)'
+  - Rscript -e 'library(RUnit)'
