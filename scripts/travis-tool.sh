@@ -98,15 +98,17 @@ RBinaryInstall() {
         exit 1
     fi
 
-    if [ "" == "$*" ]; then
+    if [[ -z "$#" ]]; then
         echo "No arguments to r_binary_install"
         exit 1
     fi
 
-    r_package=$(echo "$1" | tr '[:upper:]' '[:lower:]')
-    shift
-    echo "Installing *binary* R package: ${r_package}"
-    sudo apt-get install "r-cran-${r_package}"
+    for r_package in $*; do
+        r_package=$(echo "$1" | tr '[:upper:]' '[:lower:]')
+        shift
+        echo "Installing *binary* R package: ${r_package}"
+        sudo apt-get install "r-cran-${r_package}"
+    done
 }
 
 GithubPackage() {
