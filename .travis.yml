@@ -28,3 +28,5 @@ install:
   - Rscript -e 'library(stringr); library(lubridate)'
   - ./travis-tool.sh github_package assertthat
   - ./travis-tool.sh github_package testthat
+  - ./travis-tool.sh r_binary_install survey
+  - Rscript -e 'library(survey)'
