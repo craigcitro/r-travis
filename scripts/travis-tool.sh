@@ -104,8 +104,8 @@ RBinaryInstall() {
 
     for r_package in $*; do
         echo "Installing *binary* R package: ${r_package}"
-        r_package=$(echo "${r_package}" | tr '[:upper:]' '[:lower:]')
-        sudo apt-get install "r-cran-${r_package}"
+        r_deb="r-cran-$(echo "${r_package}" | tr '[:upper:]' '[:lower:]')"
+        sudo apt-get install "${r_deb}"
     done
 }
 
