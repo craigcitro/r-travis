@@ -116,8 +116,7 @@ RunTests() {
     FILE=$(ls -1 *.tar.gz)
     R CMD check "${FILE}" --no-manual --as-cran
     RES=$?
-    CHECK_DIR=$(ls -1 *.Rcheck)
-    cat ${CHECK_DIR}/tests/*Rout* 2> /dev/null
+    ls -1 *.Rcheck/tests/*Rout* | xargs cat 2> /dev/null
     exit $RES
 }
 
