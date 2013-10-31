@@ -115,7 +115,9 @@ RunTests() {
     R CMD build --no-build-vignettes .
     FILE=$(ls -1 *.tar.gz)
     R CMD check "${FILE}" --no-manual --as-cran
-    exit $?
+    RES=$?
+    cat *.Rcheck/tests/*.Rout*
+    exit $RES
 }
 
 COMMAND=$1
