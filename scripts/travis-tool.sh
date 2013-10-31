@@ -27,6 +27,10 @@ BootstrapLinux() {
     sudo add-apt-repository "deb ${CRAN}/bin/linux/ubuntu $(lsb_release -cs)/"
     sudo apt-key adv --keyserver keyserver.ubuntu.com --recv-keys E084DAB9
 
+    # Add marutter's c2d4u repository.
+    sudo add-apt-repository -y "ppa:marutter/rrutter"
+    sudo add-apt-repository -y "ppa:marutter/c2d4u"
+
     # Update after adding all repositories.
     sudo apt-get update -qq
 
@@ -51,8 +55,13 @@ BootstrapMac() {
 
 EnsureDevtools() {
     if ! Rscript -e 'if (!("devtools" %in% rownames(installed.packages()))) q(status=1)' ; then
-        # Install devtools.
-        Rscript -e 'install.packages("devtools", repos="'"${CRAN}"'")'
+        # Install devtools and testthat.
+        if [ "Linux" == "${OS}" ]; then
+            RBinaryInstall devtools testthat
+        else
+            RInstall devtools testthat
+        fi
+        # Bootstrap devtools to the live version on github.
         Rscript -e 'library(devtools); library(methods); install_github("devtools")'
     fi
 }
@@ -64,22 +73,40 @@ AptGetInstall() {
     fi
 
     if [ "" == "$*" ]; then
-        echo "No arguments"
+        echo "No arguments to aptget_install"
         exit 1
     fi
 
-    echo "AptGetInstall: Installing $*"
+    echo "Installing apt package(s) $*"
     sudo apt-get install $*
 }
 
 RInstall() {
     if [ "" == "$*" ]; then
-        echo "No arguments"
+        echo "No arguments to r_install"
         exit 1
     fi
 
-    echo "RInstall: Installing ${pkg}"
+    echo "Installing R package(s): ${pkg}"
     Rscript -e 'install.packages(commandArgs(TRUE), repos="'"${CRAN}"'")' $*
+}
+
+RBinaryInstall() {
+    if [ "Linux" != "${OS}" ]; then
+        echo "Wrong OS: ${OS}"
+        exit 1
+    fi
+
+    if [[ -z "$#" ]]; then
+        echo "No arguments to r_binary_install"
+        exit 1
+    fi
+
+    for r_package in $*; do
+        echo "Installing *binary* R package: ${r_package}"
+        r_deb="r-cran-$(echo "${r_package}" | tr '[:upper:]' '[:lower:]')"
+        sudo apt-get install "${r_deb}"
+    done
 }
 
 GithubPackage() {
@@ -101,7 +128,7 @@ GithubPackage() {
         ARGS=", ${ARGS}"
     fi
 
-    echo "Installing package: ${PACKAGE_NAME}"
+    echo "Installing github package: ${PACKAGE_NAME}"
     # Install the package.
     Rscript -e 'library(devtools); library(methods); options(repos=c(CRAN="'"${CRAN}"'")); install_github("'"${PACKAGE_NAME}"'"'"${ARGS}"')'
 }
@@ -121,7 +148,7 @@ RunTests() {
 }
 
 COMMAND=$1
-echo "Running command ${COMMAND}"
+echo "Running command: ${COMMAND}"
 shift
 case $COMMAND in
     "bootstrap")
@@ -136,6 +163,9 @@ case $COMMAND in
         ;;
     "r_install")
         RInstall "$*"
+        ;;
+    "r_binary_install")
+        RBinaryInstall "$*"
         ;;
     "github_package")
         GithubPackage "$*"
