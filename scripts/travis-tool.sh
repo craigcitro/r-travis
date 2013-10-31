@@ -102,9 +102,9 @@ RBinaryInstall() {
         exit 1
     fi
 
-    for r_package in $@; do
-        r_package=$(echo "${r_package}" | tr '[:upper:]' '[:lower:]')
+    for r_package in $*; do
         echo "Installing *binary* R package: ${r_package}"
+        r_package=$(echo "${r_package}" | tr '[:upper:]' '[:lower:]')
         sudo apt-get install "r-cran-${r_package}"
     done
 }
