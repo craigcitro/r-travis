@@ -7,8 +7,8 @@ set -e
 CRAN=${CRAN:-"http://cran.fhcrc.org"}
 OS=$(uname -s)
 
-R_BUILD_ARGS=${R_BUILD_ARGS:-"--no-build-vignettes"}
-R_CHECK_ARGS=${R_CHECK_ARGS:-"--no-manual --as-cran"}
+R_BUILD_ARGS=${R_BUILD_ARGS-"--no-build-vignettes"}
+R_CHECK_ARGS=${R_CHECK_ARGS-"--no-manual --as-cran"}
 
 Bootstrap() {
     if [ "Darwin" == "${OS}" ]; then

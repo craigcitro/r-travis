@@ -7,7 +7,7 @@ language: c
 # language: objective-c
 
 env:
-  - R_BUILD_ARGS=""
+  - R_BUILD_ARGS=" "
 script: ./travis-tool.sh run_tests
 notifications:
   email:
