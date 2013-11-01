@@ -22,8 +22,15 @@ notifications:
 # controlled by uncommenting one or both of the following; the values
 # here are the defaults:
 # env:
-#  - R_BUILD_ARGS="--no-build-vignettes"
-#  - R_CHECK_ARGS="--no-manual --as-cran"
+#   global:
+#     - R_BUILD_ARGS="--no-build-vignettes"
+#     - R_CHECK_ARGS="--no-manual --as-cran"
+# You may want also to test several build configurations in parallel, in a build
+# matrix:
+# env:
+#   matrix:
+#     - R_BUILD_ARGS="--no-build-vignettes" R_CHECK_ARGS="--no-manual --as-cran"
+#     - R_BUILD_ARGS=" " R_CHECK_ARGS=" "
 # One can also restrict the branches to test, see
 #   http://about.travis-ci.org/docs/user/build-configuration/#Specify-branches-to-build
 # This example tests all branches except those with suffix -expt ("experimental").
