@@ -4,7 +4,7 @@
 
 set -e
 
-CRAN=${CRAN:-"http://cran.rstudio.com"}
+CRAN=${CRAN:-"http://cran.fhcrc.org"}
 OS=$(uname -s)
 
 R_BUILD_ARGS="--no-build-vignettes"
