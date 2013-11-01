@@ -144,7 +144,7 @@ InstallDeps() {
 RunTests() {
     R CMD build "${R_BUILD_ARGS}" .
     FILE=$(ls -1 *.tar.gz)
-    R CMD check "${FILE}" "${R_CHECK_ARGS}"
+    R CMD check "${FILE}" ${R_CHECK_ARGS}
     RES=$?
     if test -e *.Rcheck/tests/*.Rout*; then
         cat *.Rcheck/tests/*.Rout*
