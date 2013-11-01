@@ -141,6 +141,31 @@ InstallDeps() {
     Rscript -e 'library(devtools); library(methods); options(repos=c(CRAN="'"${CRAN}"'")); devtools:::install_deps(dependencies = TRUE)'
 }
 
+DumpLogsByExtension() {
+    if [[ -z "$1" ]]; then
+        echo "dump_logs_by_extension requires exactly one argument, got: $*"
+        exit 1
+    fi
+    extension=$1
+    shift
+    package=$(find . -name *Rcheck -type d)
+    if [[ ${#package[@]} -ne 1 ]]; then
+        echo "Could not find package Rcheck directory, skipping log dump."
+        exit 0
+    fi
+    for name in $(find "${package}" -type f -name "*${extension}"); do
+        echo ">>> Filename: ${name} <<<"
+        cat ${name}
+    done
+}
+
+DumpLogs() {
+    echo "Dumping test execution logs."
+    DumpLogsByExtension "out"
+    DumpLogsByExtension "log"
+    DumpLogsByExtension "fail"
+    }
+
 RunTests() {
     echo "Building with: R CMD build ${R_BUILD_ARGS}"
     R CMD build ${R_BUILD_ARGS} .
@@ -148,9 +173,7 @@ RunTests() {
     echo "Testing with: R CMD check \"${FILE}\" ${R_CHECK_ARGS}"
     R CMD check "${FILE}" ${R_CHECK_ARGS}
     RES=$?
-    if test -e *.Rcheck/tests/*.Rout*; then
-        cat *.Rcheck/tests/*.Rout*
-    fi
+    DumpLogs
     exit $RES
 }
 
@@ -182,5 +205,11 @@ case $COMMAND in
         ;;
     "run_tests")
         RunTests
+        ;;
+    "dump_logs")
+        DumpLogs
+        ;;
+    "dump_logs_by_extension")
+        DumpLogsByExtension "$*"
         ;;
 esac
