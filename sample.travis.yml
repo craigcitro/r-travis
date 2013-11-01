@@ -22,7 +22,7 @@ notifications:
 # controlled by uncommenting one or both of the following; the values
 # here are the defaults:
 # env:
-#  - R_BUILD_ARGS="--no-build-vignettes
+#  - R_BUILD_ARGS="--no-build-vignettes"
 #  - R_CHECK_ARGS="--no-manual --as-cran"
 # One can also restrict the branches to test, see
 #   http://about.travis-ci.org/docs/user/build-configuration/#Specify-branches-to-build
