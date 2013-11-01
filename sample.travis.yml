@@ -13,11 +13,16 @@ before_install:
 install:
   - ./travis-tool.sh install_deps
   - ./travis-tool.sh github_package assertthat
-# Configuration options below this line are suggested options.
 notifications:
   email:
     on_success: change
     on_failure: change
+# Configuration options below this line are suggested options.
+#
+# One can also only dump logs on failure by using `after_failure`
+# instead of `after_script`.
+after_script:
+  - ./travis-tool.sh dump_logs
 #
 # One can also restrict the branches to test, see
 #   http://about.travis-ci.org/docs/user/build-configuration/#Specify-branches-to-build

@@ -17,6 +17,10 @@ before_install:
   - cp scripts/travis-tool.sh fakepackage
   - cd fakepackage
   - ./travis-tool.sh bootstrap
+after_success:
+  - ./travis-tool.sh dump_logs_by_extension out
+after_failure:
+  - ./travis-tool.sh dump_logs
 install:
   - ./travis-tool.sh install_deps
   # TESTS
