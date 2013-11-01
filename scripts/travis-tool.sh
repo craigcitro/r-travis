@@ -172,9 +172,6 @@ RunTests() {
     FILE=$(ls -1 *.tar.gz)
     echo "Testing with: R CMD check \"${FILE}\" ${R_CHECK_ARGS}"
     R CMD check "${FILE}" ${R_CHECK_ARGS}
-    RES=$?
-    DumpLogs
-    exit $RES
 }
 
 COMMAND=$1
