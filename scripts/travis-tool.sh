@@ -144,7 +144,7 @@ RunTests() {
     R CMD check "${FILE}" --no-manual --as-cran
     RES=$?
     out_path='*.Rcheck/tests/*.Rout*'
-    if test -e ${out_path}; then
+    if test -e "${out_path}"; then
         cat "${out_path}"
     fi
     exit $RES
