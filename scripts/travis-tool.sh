@@ -8,7 +8,7 @@ CRAN=${CRAN:-"http://cran.fhcrc.org"}
 OS=$(uname -s)
 
 R_BUILD_ARGS="--no-build-vignettes"
-R_CHECK_ARGS="--no-manual --as-cran"
+R_CHECK_ARGS="--no-manual"
 
 Bootstrap() {
     if [ "Darwin" == "${OS}" ]; then
@@ -142,8 +142,10 @@ InstallDeps() {
 }
 
 RunTests() {
-    R CMD build "${R_BUILD_ARGS}" .
+    echo "Building with: R CMD build ${R_BUILD_ARGS}"
+    R CMD build ${R_BUILD_ARGS} .
     FILE=$(ls -1 *.tar.gz)
+    echo "Testing with: R CMD check \"${FILE}\" ${R_CHECK_ARGS}"
     R CMD check "${FILE}" ${R_CHECK_ARGS}
     RES=$?
     if test -e *.Rcheck/tests/*.Rout*; then
