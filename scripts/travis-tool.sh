@@ -143,9 +143,8 @@ RunTests() {
     FILE=$(ls -1 *.tar.gz)
     R CMD check "${FILE}" --no-manual --as-cran
     RES=$?
-    out_path='*.Rcheck/tests/*.Rout*'
-    if test -e "${out_path}"; then
-        cat "${out_path}"
+    if test -e *.Rcheck/tests/*.Rout*; then
+        cat *.Rcheck/tests/*.Rout*
     fi
     exit $RES
 }
