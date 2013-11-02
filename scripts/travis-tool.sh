@@ -37,8 +37,10 @@ BootstrapLinux() {
     # Update after adding all repositories.
     sudo apt-get update -qq
 
-    # Install an R development environment
-    sudo apt-get install r-base-dev
+    # Install an R development environment. qpdf is also needed for
+    # --as-cran checks:
+    #   https://stat.ethz.ch/pipermail/r-help//2012-September/335676.html
+    sudo apt-get install r-base-dev qpdf
 
     # Change permissions for /usr/local/lib/R/site-library
     # This should really be via 'staff adduser travis staff'
