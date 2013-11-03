@@ -28,6 +28,8 @@ install:
   # The following lines exist to test various features of our travis
   # scripts; don't use these as a model for other `.travis.yml` files.
   # Test aptget_install with multiple arguments.
+  - test -z "$(which tmux)"
+  - test -z "$(which killall)"
   - ./travis-tool.sh aptget_install tmux psmisc
   - test -n "$(which tmux)"
   - test -n "$(which killall)"
