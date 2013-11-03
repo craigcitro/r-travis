@@ -46,16 +46,43 @@ BootstrapLinux() {
     # This should really be via 'staff adduser travis staff'
     # but that may affect only the next shell
     sudo chmod 2777 /usr/local/lib/R /usr/local/lib/R/site-library
+
+    # Process options
+    BootstrapLinuxOptions
+}
+
+BootstrapLinuxOptions() {
+    if [ -n "$BOOTSTRAP_LATEX" ]; then
+        sudo apt-get install --no-install-recommends \
+            texlive-base texlive-latex-base texlive-generic-recommended \
+            texlive-fonts-recommended texlive-fonts-extra \
+            texlive-extra-utils texlive-latex-recommended texlive-latex-extra \
+            texinfo lmodern
+    fi
 }
 
 BootstrapMac() {
-    # TODO(craigcitro): Figure out TeX in OSX+travis.
-
     # Install from latest CRAN binary build for OS X
     wget ${CRAN}/bin/macosx/R-latest.pkg  -O /tmp/R-latest.pkg
 
     echo "Installing OS X binary package for R"
     sudo installer -pkg "/tmp/R-latest.pkg" -target /
+    rm "/tmp/R-latest.pkg"
+
+    # Process options
+    BootstrapMacOptions
+}
+
+BootstrapMacOptions() {
+    if [ -n "$BOOTSTRAP_LATEX" ]; then
+        # TODO: Install MacTeX.pkg once there's enough disk space
+        MACTEX=mactex-basic.pkg
+        wget http://ctan.math.utah.edu/ctan/tex-archive/systems/mac/mactex/$MACTEX -O "/tmp/$MACTEX"
+
+        echo "Installing OS X binary package for MacTeX"
+        sudo installer -pkg "/tmp/$MACTEX" -target /
+        rm "/tmp/$MACTEX"
+    fi
 }
 
 EnsureDevtools() {

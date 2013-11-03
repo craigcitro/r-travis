@@ -7,7 +7,11 @@ language: c
 # language: objective-c
 
 env:
-  - R_BUILD_ARGS=" "
+  global:
+    - R_BUILD_ARGS=" "
+  matrix:
+    - BOOTSTRAP_LATEX=""
+    - BOOTSTRAP_LATEX="1"
 script: ./travis-tool.sh run_tests
 notifications:
   email:
@@ -17,6 +21,7 @@ before_install:
   - cp scripts/travis-tool.sh fakepackage
   - cd fakepackage
   - ./travis-tool.sh bootstrap
+  - source /etc/profile # Need to reload PATH on OS X
 before_script:
   - ./travis-tool.sh dump_sysinfo
 after_success:
@@ -47,3 +52,6 @@ install:
   - ./travis-tool.sh r_binary_install RUnit survey
   - Rscript -e 'library(RUnit); library(survey)'
   - ./travis-tool.sh dump_sysinfo | grep -q 'R version '
+  # Test --latex option: pdflatex, kpsewhich
+  - if test "${BOOTSTRAP_OPTS/--latex/}" != "${BOOTSTRAP_OPTS}"; then test -n "$(which kpsewhich)"; fi
+  - if test "${BOOTSTRAP_OPTS/--latex/}" != "${BOOTSTRAP_OPTS}"; then test -n "$(which pdflatex)"; fi
