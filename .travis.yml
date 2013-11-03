@@ -17,6 +17,8 @@ before_install:
   - cp scripts/travis-tool.sh fakepackage
   - cd fakepackage
   - ./travis-tool.sh bootstrap
+before_script:
+  - ./travis-tool.sh dump_sysinfo
 after_success:
   - ./travis-tool.sh dump_logs_by_extension out
 after_failure:
@@ -36,3 +38,4 @@ install:
   - ./travis-tool.sh github_package testthat
   - ./travis-tool.sh r_binary_install RUnit survey
   - Rscript -e 'library(RUnit); library(survey)'
+  - ./travis-tool.sh dump_sysinfo | egrep "^R version [0-9]+\.[0-9]+\.[0-9]+"
