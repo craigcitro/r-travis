@@ -38,6 +38,7 @@ install:
   # Test r_install (which accepts multiple arguments).
   - ./travis-tool.sh r_install stringr lubridate
   - Rscript -e 'library(stringr); library(lubridate)'
+  - Rscript -e 'stopifnot(!any(c("assertthat", "testthat") %in% installed.packages())'
   - ./travis-tool.sh github_package assertthat
   - ./travis-tool.sh github_package testthat
   - Rscript -e 'library(assertthat); library(testthat)'
