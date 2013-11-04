@@ -46,4 +46,4 @@ install:
   # Test R binary installation.
   - ./travis-tool.sh r_binary_install RUnit survey
   - Rscript -e 'library(RUnit); library(survey)'
-  - ./travis-tool.sh dump_sysinfo | egrep "^R version [0-9]+\.[0-9]+\.[0-9]+"
+  - ./travis-tool.sh dump_sysinfo | grep -q 'R version '
