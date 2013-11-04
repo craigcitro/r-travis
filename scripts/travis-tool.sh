@@ -107,11 +107,14 @@ RBinaryInstall() {
         exit 1
     fi
 
-    for r_package in $*; do
-        echo "Installing *binary* R package: ${r_package}"
+    r_packages=$*
+    r_debs=$(for r_package in ${r_packages}; do
         r_deb="r-cran-$(echo "${r_package}" | tr '[:upper:]' '[:lower:]')"
-        sudo apt-get install "${r_deb}"
-    done
+        echo -n "${r_deb} "
+    done)
+
+    echo "Installing *binary* R packages: ${r_packages}"
+    sudo apt-get install ${r_debs}
 }
 
 GithubPackage() {
