@@ -32,11 +32,11 @@ install:
   # The following lines exist to test various features of our travis
   # scripts; don't use these as a model for other `.travis.yml` files.
   # Test aptget_install with multiple arguments.
-  - test -z "$(which tmux)"
-  - test -z "$(which sponge)"
-  - ./travis-tool.sh aptget_install tmux moreutils
-  - test -n "$(which tmux)"
-  - test -n "$(which sponge)"
+  - if test ${OS} = Linux; then test -z "$(which tmux)"; fi
+  - if test ${OS} = Linux; then test -z "$(which sponge)"; fi
+  - if test ${OS} = Linux; then ./travis-tool.sh aptget_install tmux moreutils; fi
+  - if test ${OS} = Linux; then test -n "$(which tmux)"; fi
+  - if test ${OS} = Linux; then test -n "$(which sponge)"; fi
   # Test r_install (which accepts multiple arguments).
   - ./travis-tool.sh r_install stringr lubridate
   - Rscript -e 'library(stringr); library(lubridate)'
@@ -46,6 +46,6 @@ install:
   - ./travis-tool.sh github_package testthat
   - Rscript -e 'library(assertthat); library(testthat)'
   # Test R binary installation.
-  - ./travis-tool.sh r_binary_install RUnit survey
-  - Rscript -e 'library(RUnit); library(survey)'
+  - if test ${OS} = Linux; then ./travis-tool.sh r_binary_install RUnit survey; fi
+  - if test ${OS} = Linux; then Rscript -e 'library(RUnit); library(survey)'; fi
   - ./travis-tool.sh dump_sysinfo | grep -q 'R version '
