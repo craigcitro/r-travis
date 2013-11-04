@@ -190,8 +190,7 @@ case $COMMAND in
         Bootstrap
         ;;
     "devtools_install")
-        # TODO(craigcitro): Delete this function, since we don't need it.
-        echo '***** devtools_install is deprecated and will soon disappear. *****'
+        EnsureDevtools
         ;;
     "aptget_install")
         AptGetInstall "$*"
