@@ -31,19 +31,19 @@ install:
   # scripts; don't use these as a model for other `.travis.yml` files.
   # Test aptget_install with multiple arguments.
   - test -z "$(which tmux)"
-  - test -n "$(which killall)"
   - test -z "$(which sponge)"
-  - ./travis-tool.sh aptget_install tmux psmisc moreutils
+  - ./travis-tool.sh aptget_install tmux moreutils
   - test -n "$(which tmux)"
-  - test -n "$(which killall)"
   - test -n "$(which sponge)"
   # Test r_install (which accepts multiple arguments).
   - ./travis-tool.sh r_install stringr lubridate
   - Rscript -e 'library(stringr); library(lubridate)'
+  # Test github package installation.
   - Rscript -e 'stopifnot(!any(c("assertthat", "testthat") %in% installed.packages())'
   - ./travis-tool.sh github_package assertthat
   - ./travis-tool.sh github_package testthat
   - Rscript -e 'library(assertthat); library(testthat)'
+  # Test R binary installation.
   - ./travis-tool.sh r_binary_install RUnit survey
   - Rscript -e 'library(RUnit); library(survey)'
   - ./travis-tool.sh dump_sysinfo | egrep "^R version [0-9]+\.[0-9]+\.[0-9]+"
