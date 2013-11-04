@@ -13,8 +13,6 @@ before_install:
 install:
   - ./travis-tool.sh install_deps
   - ./travis-tool.sh github_package assertthat
-before_script:
-  - ./travis-tool.sh dump_sysinfo
 notifications:
   email:
     on_success: change
