@@ -107,13 +107,10 @@ RBinaryInstall() {
         exit 1
     fi
 
-    r_packages=$*
-    r_debs=$(for r_package in ${r_packages}; do
-        r_deb="r-cran-$(echo "${r_package}" | tr '[:upper:]' '[:lower:]')"
-        echo -n "${r_deb} "
-    done)
+    echo "Installing *binary* R packages: $*"
+    r_packages=$(echo $* | tr '[:upper:]' '[:lower:]')
+    r_debs=$(for r_package in ${r_packages}; do echo -n "r-cran-${r_package} "; done)
 
-    echo "Installing *binary* R packages: ${r_packages}"
     sudo apt-get install ${r_debs}
 }
 
