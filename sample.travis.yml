@@ -1,10 +1,10 @@
 # Sample .travis.yml for R projects.
 #
-# See README.md for instructions.
+# See README.md and the wiki:
+#   https://github.com/craigcitro/r-travis/wiki
+# for instructions, examples and more configuration options.
 
 language: c
-# To build on OSX, switch the previous line to
-# language: objective-c
 script: ./travis-tool.sh run_tests
 before_install:
   - curl -OL http://raw.github.com/craigcitro/r-travis/master/scripts/travis-tool.sh
@@ -17,6 +17,7 @@ notifications:
   email:
     on_success: change
     on_failure: change
+#
 # Configuration options below this line are suggested options.
 #
 # One can also only dump logs on failure by using `after_failure`
