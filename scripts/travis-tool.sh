@@ -7,6 +7,14 @@ set -e
 CRAN=${CRAN:-"http://cran.rstudio.com"}
 OS=$(uname -s)
 
+# MacTeX installs in a new $PATH entry, and there's no way to force
+# the *parent* shell to source it from here. So we just manually add
+# all the entries to a location we already know to be on $PATH.
+#
+# TODO(craigcitro): Remove this once we can add `/usr/texbin` to the
+# root path.
+PATH="${PATH}:/usr/texbin"
+
 R_BUILD_ARGS=${R_BUILD_ARGS-"--no-build-vignettes"}
 R_CHECK_ARGS=${R_CHECK_ARGS-"--no-manual --as-cran"}
 
@@ -46,16 +54,48 @@ BootstrapLinux() {
     # This should really be via 'staff adduser travis staff'
     # but that may affect only the next shell
     sudo chmod 2777 /usr/local/lib/R /usr/local/lib/R/site-library
+
+    # Process options
+    BootstrapLinuxOptions
+}
+
+BootstrapLinuxOptions() {
+    if [ -n "$BOOTSTRAP_LATEX" ]; then
+        sudo apt-get install --no-install-recommends \
+            texlive-base texlive-latex-base texlive-generic-recommended \
+            texlive-fonts-recommended texlive-fonts-extra \
+            texlive-extra-utils texlive-latex-recommended texlive-latex-extra \
+            texinfo lmodern
+    fi
 }
 
 BootstrapMac() {
-    # TODO(craigcitro): Figure out TeX in OSX+travis.
-
     # Install from latest CRAN binary build for OS X
     wget ${CRAN}/bin/macosx/R-latest.pkg  -O /tmp/R-latest.pkg
 
     echo "Installing OS X binary package for R"
     sudo installer -pkg "/tmp/R-latest.pkg" -target /
+    rm "/tmp/R-latest.pkg"
+
+    # Process options
+    BootstrapMacOptions
+}
+
+BootstrapMacOptions() {
+    if [[ -n "$BOOTSTRAP_LATEX" ]]; then
+        # TODO: Install MacTeX.pkg once there's enough disk space
+        MACTEX=mactex-basic.pkg
+        wget http://ctan.math.utah.edu/ctan/tex-archive/systems/mac/mactex/$MACTEX -O "/tmp/$MACTEX"
+
+        echo "Installing OS X binary package for MacTeX"
+        sudo installer -pkg "/tmp/$MACTEX" -target /
+        rm "/tmp/$MACTEX"
+        # We need a few more packages than the basic package provides; this
+        # post saved me so much pain:
+        #   https://stat.ethz.ch/pipermail/r-sig-mac/2010-May/007399.html
+        sudo tlmgr update --self
+        sudo tlmgr install inconsolata upquote courier courier-scaled helvetic
+    fi
 }
 
 EnsureDevtools() {
