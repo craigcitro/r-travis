@@ -10,6 +10,7 @@ if test -n "$(git status --porcelain)"; then
   exit 1
 fi
 
+git branch -D $OSX_BRANCH
 git checkout -b $OSX_BRANCH
 sed -i -r 's/^language: c/language: objective-c/' .travis.yml
 git add .travis.yml
