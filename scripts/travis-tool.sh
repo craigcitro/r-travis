@@ -3,6 +3,8 @@
 # Bootstrap an R/travis environment.
 
 set -e
+# Comment out this line for quieter output:
+set -x
 
 CRAN=${CRAN:-"http://cran.rstudio.com"}
 OS=$(uname -s)
@@ -19,9 +21,9 @@ R_BUILD_ARGS=${R_BUILD_ARGS-"--no-build-vignettes"}
 R_CHECK_ARGS=${R_CHECK_ARGS-"--no-manual --as-cran"}
 
 Bootstrap() {
-    if [ "Darwin" == "${OS}" ]; then
+    if [[ "Darwin" == "${OS}" ]]; then
         BootstrapMac
-    elif [ "Linux" == "${OS}" ]; then
+    elif [[ "Linux" == "${OS}" ]]; then
         BootstrapLinux
     else
         echo "Unknown OS: ${OS}"
@@ -60,7 +62,7 @@ BootstrapLinux() {
 }
 
 BootstrapLinuxOptions() {
-    if [ -n "$BOOTSTRAP_LATEX" ]; then
+    if [[ -n "$BOOTSTRAP_LATEX" ]]; then
         sudo apt-get install --no-install-recommends \
             texlive-base texlive-latex-base texlive-generic-recommended \
             texlive-fonts-recommended texlive-fonts-extra \
@@ -101,7 +103,7 @@ BootstrapMacOptions() {
 EnsureDevtools() {
     if ! Rscript -e 'if (!("devtools" %in% rownames(installed.packages()))) q(status=1)' ; then
         # Install devtools and testthat.
-        if [ "Linux" == "${OS}" ]; then
+        if [[ "Linux" == "${OS}" ]]; then
             RBinaryInstall devtools testthat
         else
             RInstall devtools testthat
@@ -112,12 +114,12 @@ EnsureDevtools() {
 }
 
 AptGetInstall() {
-    if [ "Linux" != "${OS}" ]; then
+    if [[ "Linux" != "${OS}" ]]; then
         echo "Wrong OS: ${OS}"
         exit 1
     fi
 
-    if [ "" == "$*" ]; then
+    if [[ "" == "$*" ]]; then
         echo "No arguments to aptget_install"
         exit 1
     fi
@@ -127,7 +129,7 @@ AptGetInstall() {
 }
 
 RInstall() {
-    if [ "" == "$*" ]; then
+    if [[ "" == "$*" ]]; then
         echo "No arguments to r_install"
         exit 1
     fi
@@ -137,7 +139,7 @@ RInstall() {
 }
 
 RBinaryInstall() {
-    if [ "Linux" != "${OS}" ]; then
+    if [[ "Linux" != "${OS}" ]]; then
         echo "Wrong OS: ${OS}"
         exit 1
     fi
@@ -155,9 +157,6 @@ RBinaryInstall() {
 }
 
 GithubPackage() {
-    # An embarrassingly awful script for calling install_github from a
-    # .travis.yml.
-    #
     # Note that bash quoting makes this annoying for any additional
     # arguments.
 
@@ -169,7 +168,7 @@ GithubPackage() {
 
     # Join the remaining args.
     ARGS=$(echo $* | sed -e 's/ /, /g')
-    if [ -n "${ARGS}" ]; then
+    if [[ -n "${ARGS}" ]]; then
         ARGS=", ${ARGS}"
     fi
 
