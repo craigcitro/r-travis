@@ -219,6 +219,13 @@ RunTests() {
 
     echo "Testing with: R CMD check \"${FILE}\" ${R_CHECK_ARGS}"
     R CMD check "${FILE}" ${R_CHECK_ARGS}
+
+    if [[ -n "${WARNINGS_ARE_ERRORS}" ]]; then
+        if DumpLogsByExtension "00check.log" | grep -q WARNING; then
+            echo "Found warnings, treated as errors."
+            exit 1
+        fi
+    fi
 }
 
 COMMAND=$1
