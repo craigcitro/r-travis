@@ -7,6 +7,8 @@ language: c
 # language: objective-c
 
 env:
+  global:
+    - OS=$(uname -s)
   matrix:
     - BOOTSTRAP_LATEX=" "
     - R_BUILD_ARGS=" " R_CHECK_ARGS="--as-cran" BOOTSTRAP_LATEX="1"
