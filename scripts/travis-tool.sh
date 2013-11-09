@@ -44,8 +44,9 @@ BootstrapLinux() {
     sudo add-apt-repository -y "ppa:marutter/rrutter"
     sudo add-apt-repository -y "ppa:marutter/c2d4u"
 
-    # Update after adding all repositories.
-    sudo apt-get update -qq
+    # Update after adding all repositories.  Retry several times to work around
+    # flaky connection to Launchpad PPAs.
+    Retry sudo apt-get update -qq
 
     # Install an R development environment. qpdf is also needed for
     # --as-cran checks:
@@ -224,6 +225,15 @@ RunTests() {
             exit 1
         fi
     fi
+}
+
+Retry() {
+    NEXT_WAIT_TIME=1
+    until "$@"; do
+        echo "Retrying in ${NEXT_WAIT_TIME} seconds"
+        sleep ${NEXT_WAIT_TIME}
+        NEXT_WAIT_TIME=$((${NEXT_WAIT_TIME} * 2))
+    done
 }
 
 COMMAND=$1
