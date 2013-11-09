@@ -103,11 +103,8 @@ BootstrapMacOptions() {
 EnsureDevtools() {
     if ! Rscript -e 'if (!("devtools" %in% rownames(installed.packages()))) q(status=1)' ; then
         # Install devtools and testthat.
-        if [[ "Linux" == "${OS}" ]]; then
-            RBinaryInstall devtools testthat
-        else
-            RInstall devtools testthat
-        fi
+        RBinaryInstall devtools testthat
+
         # Bootstrap devtools to the live version on github.
         Rscript -e 'library(devtools); library(methods); install_github("devtools")'
     fi
@@ -139,14 +136,15 @@ RInstall() {
 }
 
 RBinaryInstall() {
-    if [[ "Linux" != "${OS}" ]]; then
-        echo "Wrong OS: ${OS}"
-        exit 1
-    fi
-
     if [[ -z "$#" ]]; then
         echo "No arguments to r_binary_install"
         exit 1
+    fi
+
+    if [[ "Linux" != "${OS}" -o -n "${FORCE_SOURCE_INSTALL}" ]]; then
+        echo "Fallback: Installing from source"
+        RInstall "$@"
+        return
     fi
 
     echo "Installing *binary* R packages: $*"
