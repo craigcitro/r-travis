@@ -141,7 +141,7 @@ RBinaryInstall() {
         exit 1
     fi
 
-    if [[ "Linux" != "${OS}" -o -n "${FORCE_SOURCE_INSTALL}" ]]; then
+    if [[ "Linux" != "${OS}" ]] || [[ -n "${FORCE_SOURCE_INSTALL}" ]]; then
         echo "Fallback: Installing from source"
         RInstall "$@"
         return
