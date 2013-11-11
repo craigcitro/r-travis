@@ -51,7 +51,7 @@ BootstrapLinux() {
     # Install an R development environment. qpdf is also needed for
     # --as-cran checks:
     #   https://stat.ethz.ch/pipermail/r-help//2012-September/335676.html
-    sudo apt-get install r-base-dev qpdf
+    Retry sudo apt-get install r-base-dev qpdf
 
     # Change permissions for /usr/local/lib/R/site-library
     # This should really be via 'staff adduser travis staff'
@@ -64,7 +64,7 @@ BootstrapLinux() {
 
 BootstrapLinuxOptions() {
     if [[ -n "$BOOTSTRAP_LATEX" ]]; then
-        sudo apt-get install --no-install-recommends \
+        Retry sudo apt-get install --no-install-recommends \
             texlive-base texlive-latex-base texlive-generic-recommended \
             texlive-fonts-recommended texlive-fonts-extra \
             texlive-extra-utils texlive-latex-recommended texlive-latex-extra \
@@ -123,7 +123,7 @@ AptGetInstall() {
     fi
 
     echo "Installing apt package(s) $*"
-    sudo apt-get install $*
+    Retry sudo apt-get install $*
 }
 
 RInstall() {
@@ -152,7 +152,7 @@ RBinaryInstall() {
     r_packages=$(echo $* | tr '[:upper:]' '[:lower:]')
     r_debs=$(for r_package in ${r_packages}; do echo -n "r-cran-${r_package} "; done)
 
-    sudo apt-get install ${r_debs}
+    AptGetInstall ${r_debs}
 }
 
 GithubPackage() {
