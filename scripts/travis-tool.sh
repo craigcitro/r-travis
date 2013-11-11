@@ -229,10 +229,15 @@ RunTests() {
 
 Retry() {
     NEXT_WAIT_TIME=1
+    MAX_SLEEP=60
     until "$@"; do
         echo "Retrying in ${NEXT_WAIT_TIME} seconds"
         sleep ${NEXT_WAIT_TIME}
+
         NEXT_WAIT_TIME=$((${NEXT_WAIT_TIME} * 2))
+        if [[ ${NEXT_WAIT_TIME} -ge ${MAX_SLEEP} ]]; then
+            NEXT_WAIT_TIME=${MAX_SLEEP}
+        fi
     done
 }
 
