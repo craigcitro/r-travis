@@ -44,13 +44,14 @@ BootstrapLinux() {
     sudo add-apt-repository -y "ppa:marutter/rrutter"
     sudo add-apt-repository -y "ppa:marutter/c2d4u"
 
-    # Update after adding all repositories.
-    sudo apt-get update -qq
+    # Update after adding all repositories.  Retry several times to work around
+    # flaky connection to Launchpad PPAs.
+    Retry sudo apt-get update -qq
 
     # Install an R development environment. qpdf is also needed for
     # --as-cran checks:
     #   https://stat.ethz.ch/pipermail/r-help//2012-September/335676.html
-    sudo apt-get install r-base-dev qpdf
+    Retry sudo apt-get install r-base-dev qpdf
 
     # Change permissions for /usr/local/lib/R/site-library
     # This should really be via 'staff adduser travis staff'
@@ -63,7 +64,7 @@ BootstrapLinux() {
 
 BootstrapLinuxOptions() {
     if [[ -n "$BOOTSTRAP_LATEX" ]]; then
-        sudo apt-get install --no-install-recommends \
+        Retry sudo apt-get install --no-install-recommends \
             texlive-base texlive-latex-base texlive-generic-recommended \
             texlive-fonts-recommended texlive-fonts-extra \
             texlive-extra-utils texlive-latex-recommended texlive-latex-extra \
@@ -122,7 +123,7 @@ AptGetInstall() {
     fi
 
     echo "Installing apt package(s) $*"
-    sudo apt-get install $*
+    Retry sudo apt-get install $*
 }
 
 RInstall() {
@@ -151,7 +152,7 @@ RBinaryInstall() {
     r_packages=$(echo $* | tr '[:upper:]' '[:lower:]')
     r_debs=$(for r_package in ${r_packages}; do echo -n "r-cran-${r_package} "; done)
 
-    sudo apt-get install ${r_debs}
+    AptGetInstall ${r_debs}
 }
 
 GithubPackage() {
@@ -224,6 +225,20 @@ RunTests() {
             exit 1
         fi
     fi
+}
+
+Retry() {
+    NEXT_WAIT_TIME=1
+    MAX_SLEEP=60
+    until "$@"; do
+        echo "Retrying in ${NEXT_WAIT_TIME} seconds"
+        sleep ${NEXT_WAIT_TIME}
+
+        NEXT_WAIT_TIME=$((${NEXT_WAIT_TIME} * 2))
+        if [[ ${NEXT_WAIT_TIME} -ge ${MAX_SLEEP} ]]; then
+            NEXT_WAIT_TIME=${MAX_SLEEP}
+        fi
+    done
 }
 
 COMMAND=$1
