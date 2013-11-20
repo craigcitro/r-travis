@@ -252,7 +252,8 @@ case $COMMAND in
         ;;
     ##
     ## Ensure devtools is loaded (implicitly called)
-    "install_devtools"|"ensure_devtools")
+    "install_devtools"|"devtools_install")
+	EnsureDevtools
         ;;
     ##
     ## Install a binary deb package via apt-get
