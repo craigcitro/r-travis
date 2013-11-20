@@ -252,42 +252,26 @@ case $COMMAND in
         ;;
     ##
     ## Ensure devtools is loaded (implicitly called)
-    "ensure_devtools")
-        EnsureDevtools
-        ;;
-    "devtools_install")
-        EnsureDevtools
+    "install_devtools"|"ensure_devtools")
         ;;
     ##
     ## Install a binary deb package via apt-get
-    "install_aptget")
-        AptGetInstall "$*"
-        ;;
-    "aptget_install")
+    "install_aptget"|"aptget_install")
         AptGetInstall "$*"
         ;;
     ##
     ## Install an R dependency from CRAN
-    "install_r")
-        RInstall "$*"
-        ;;
-    "r_install")
+    "install_r"|"r_install")
         RInstall "$*"
         ;;
     ##
     ## Install an R dependency as a binary (via c2d4u PPA)
-    "install_r_binary")
-        RBinaryInstall "$*"
-        ;;
-    "r_binary_install")
+    "install_r_binary"|"r_binary_install")
         RBinaryInstall "$*"
         ;;
     ##
     ## Install a package from github sources (needs devtools)
-    "install_github")
-        GithubPackage "$*"
-        ;;
-    "github_package")
+    "install_github"|"github_package")
         GithubPackage "$*"
         ;;
     ##
