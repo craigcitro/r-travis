@@ -42,11 +42,10 @@ install:
   # Test install_r (which accepts multiple arguments).
   - ./travis-tool.sh install_r stringr lubridate
   - Rscript -e 'library(stringr); library(lubridate)'
-  # Test github package installation.
-  - Rscript -e 'stopifnot(!any(c("assertthat", "testthat") %in% installed.packages())'
-  - ./travis-tool.sh install_github assertthat
-  - ./travis-tool.sh install_github testthat
-  - Rscript -e 'library(assertthat); library(testthat)'
+  # Test github package installation (which accepts multiple arguments).
+  - Rscript -e 'stopifnot(!any(c("assertthat", "testthat", "roxygen2") %in% installed.packages())'
+  - ./travis-tool.sh install_github assertthat testthat klutometis/roxygen
+  - Rscript -e 'library(assertthat); library(testthat); library(roxygen2)'
   # Test R binary installation.
   - if test ${OS} = Linux; then ./travis-tool.sh install_r_binary RUnit survey; fi
   - if test ${OS} = Linux; then Rscript -e 'library(RUnit); library(survey)'; fi

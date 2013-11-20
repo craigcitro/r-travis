@@ -176,6 +176,14 @@ GithubPackage() {
     Rscript -e 'library(devtools); library(methods); options(repos=c(CRAN="'"${CRAN}"'")); install_github("'"${PACKAGE_NAME}"'"'"${ARGS}"')'
 }
 
+InstallGithub() {
+    EnsureDevtools
+
+    echo "Installing GitHub packages: $*"
+    # Install the package.
+    Rscript -e 'library(devtools); library(methods); options(repos=c(CRAN="'"${CRAN}"'")); install_github(commandArgs(TRUE))' $*
+}
+
 InstallDeps() {
     EnsureDevtools
     Rscript -e 'library(devtools); library(methods); options(repos=c(CRAN="'"${CRAN}"'")); devtools:::install_deps(dependencies = TRUE)'
@@ -272,7 +280,10 @@ case $COMMAND in
         ;;
     ##
     ## Install a package from github sources (needs devtools)
-    "install_github"|"github_package")
+    "install_github")
+        InstallGithub "$*"
+        ;;
+    "github_package")
         GithubPackage "$*"
         ;;
     ##
