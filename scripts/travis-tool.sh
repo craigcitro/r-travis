@@ -245,36 +245,73 @@ COMMAND=$1
 echo "Running command: ${COMMAND}"
 shift
 case $COMMAND in
+    ##
+    ## Bootstrap a new core system
     "bootstrap")
         Bootstrap
+        ;;
+    ##
+    ## Ensure devtools is loaded (implicitly called)
+    "ensure_devtools")
+        EnsureDevtools
         ;;
     "devtools_install")
         EnsureDevtools
         ;;
+    ##
+    ## Install a binary deb package via apt-get
+    "install_aptget")
+        AptGetInstall "$*"
+        ;;
     "aptget_install")
         AptGetInstall "$*"
+        ;;
+    ##
+    ## Install an R dependency from CRAN
+    "install_r")
+        RInstall "$*"
         ;;
     "r_install")
         RInstall "$*"
         ;;
+    ##
+    ## Install an R dependency as a binary (via c2d4u PPA)
+    "install_r_binary")
+        RBinaryInstall "$*"
+        ;;
     "r_binary_install")
         RBinaryInstall "$*"
+        ;;
+    ##
+    ## Install a package from github sources (needs devtools)
+    "install_github")
+        GithubPackage "$*"
         ;;
     "github_package")
         GithubPackage "$*"
         ;;
+    ##
+    ## Install package dependencies from CRAN (needs devtools)
     "install_deps")
         InstallDeps
         ;;
+    ##
+    ## Run the actual tests, ie R CMD check
     "run_tests")
         RunTests
         ;;
+    ##
+    ## Dump information about installed packages
     "dump_sysinfo")
         DumpSysinfo
         ;;
+    ##
+    ## Dump build or check logs
     "dump_logs")
         DumpLogs
         ;;
+    ##
+    ## Dump selected build or check logs
     "dump_logs_by_extension")
         DumpLogsByExtension "$*"
         ;;
