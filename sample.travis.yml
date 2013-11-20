@@ -5,14 +5,23 @@
 # for instructions, examples and more configuration options.
 
 language: c
-script: ./travis-tool.sh run_tests
+env:
+  - global:
+    - WARNINGS_ARE_ERRORS=1
+
 before_install:
   - curl -OL http://raw.github.com/craigcitro/r-travis/master/scripts/travis-tool.sh
   - chmod 755 ./travis-tool.sh
   - ./travis-tool.sh bootstrap
 install:
+# - ./travis-tool.sh github_package hadley/testthat
+# - ./travis-tool.sh r_binary_install XML
   - ./travis-tool.sh install_deps
-  - ./travis-tool.sh github_package assertthat
+script: ./travis-tool.sh run_tests
+
+on_failure:
+  - ./travis-tool.sh dump_logs
+
 notifications:
   email:
     on_success: change
