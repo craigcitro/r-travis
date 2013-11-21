@@ -155,27 +155,6 @@ RBinaryInstall() {
     AptGetInstall ${r_debs}
 }
 
-GithubPackage() {
-    # Note that bash quoting makes this annoying for any additional
-    # arguments.
-
-    EnsureDevtools
-
-    # Get the package name and strip it
-    PACKAGE_NAME=$1
-    shift
-
-    # Join the remaining args.
-    ARGS=$(echo $* | sed -e 's/ /, /g')
-    if [[ -n "${ARGS}" ]]; then
-        ARGS=", ${ARGS}"
-    fi
-
-    echo "Installing github package: ${PACKAGE_NAME}"
-    # Install the package.
-    Rscript -e 'library(devtools); library(methods); options(repos=c(CRAN="'"${CRAN}"'")); install_github("'"${PACKAGE_NAME}"'"'"${ARGS}"')'
-}
-
 InstallGithub() {
     EnsureDevtools
 
@@ -280,11 +259,8 @@ case $COMMAND in
         ;;
     ##
     ## Install a package from github sources (needs devtools)
-    "install_github")
+    "install_github"|"github_package")
         InstallGithub "$*"
-        ;;
-    "github_package")
-        GithubPackage "$*"
         ;;
     ##
     ## Install package dependencies from CRAN (needs devtools)
