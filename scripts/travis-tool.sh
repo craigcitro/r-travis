@@ -222,6 +222,7 @@ RunTests() {
     if [[ -n "${WARNINGS_ARE_ERRORS}" ]]; then
         if DumpLogsByExtension "00check.log" | grep -q WARNING; then
             echo "Found warnings, treated as errors."
+            echo "Clear or unset the WARNINGS_ARE_ERRORS environment variable to ignore warnings."
             exit 1
         fi
     fi
