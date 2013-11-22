@@ -33,21 +33,20 @@ install:
   #
   # The following lines exist to test various features of our travis
   # scripts; don't use these as a model for other `.travis.yml` files.
-  # Test aptget_install with multiple arguments.
+  # Test install_aptget with multiple arguments.
   - if test ${OS} = Linux; then test -z "$(which tmux)"; fi
   - if test ${OS} = Linux; then test -z "$(which sponge)"; fi
-  - if test ${OS} = Linux; then ./travis-tool.sh aptget_install tmux moreutils; fi
+  - if test ${OS} = Linux; then ./travis-tool.sh install_aptget tmux moreutils; fi
   - if test ${OS} = Linux; then test -n "$(which tmux)"; fi
   - if test ${OS} = Linux; then test -n "$(which sponge)"; fi
-  # Test r_install (which accepts multiple arguments).
-  - ./travis-tool.sh r_install stringr lubridate
+  # Test install_r (which accepts multiple arguments).
+  - ./travis-tool.sh install_r stringr lubridate
   - Rscript -e 'library(stringr); library(lubridate)'
-  # Test github package installation.
-  - Rscript -e 'stopifnot(!any(c("assertthat", "testthat") %in% installed.packages())'
-  - ./travis-tool.sh github_package assertthat
-  - ./travis-tool.sh github_package testthat
-  - Rscript -e 'library(assertthat); library(testthat)'
+  # Test github package installation (which accepts multiple arguments).
+  - Rscript -e 'stopifnot(!any(c("assertthat", "testthat", "roxygen2") %in% installed.packages())'
+  - ./travis-tool.sh install_github assertthat testthat klutometis/roxygen
+  - Rscript -e 'library(assertthat); library(testthat); library(roxygen2)'
   # Test R binary installation.
-  - if test ${OS} = Linux; then ./travis-tool.sh r_binary_install RUnit survey; fi
+  - if test ${OS} = Linux; then ./travis-tool.sh install_r_binary RUnit survey; fi
   - if test ${OS} = Linux; then Rscript -e 'library(RUnit); library(survey)'; fi
   - ./travis-tool.sh dump_sysinfo | grep -q 'R version '
