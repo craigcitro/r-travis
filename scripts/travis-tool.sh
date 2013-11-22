@@ -219,7 +219,7 @@ Retry() {
     if "$@"; then
         exit 0
     fi
-    for wait_time in "5 20 30 60"; do
+    for wait_time in 5 20 30 60; do
         echo "Command failed, retrying in ${wait_time} ..."
         sleep ${wait_time}
         if "$@"; then
