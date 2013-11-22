@@ -216,17 +216,18 @@ RunTests() {
 }
 
 Retry() {
-    NEXT_WAIT_TIME=1
-    MAX_SLEEP=60
-    until "$@"; do
-        echo "Retrying in ${NEXT_WAIT_TIME} seconds"
-        sleep ${NEXT_WAIT_TIME}
-
-        NEXT_WAIT_TIME=$((${NEXT_WAIT_TIME} * 2))
-        if [[ ${NEXT_WAIT_TIME} -ge ${MAX_SLEEP} ]]; then
-            NEXT_WAIT_TIME=${MAX_SLEEP}
+    if "$@"; then
+        exit 0
+    fi
+    for wait_time in "5 20 30 60"; do
+        echo "Command failed, retrying in ${wait_time} ..."
+        sleep ${wait_time}
+        if "$@"; then
+            exit 0
         fi
     done
+    echo "Failed all retries!"
+    exit 1
 }
 
 COMMAND=$1
