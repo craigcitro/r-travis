@@ -122,8 +122,8 @@ AptGetInstall() {
         exit 1
     fi
 
-    echo "Installing apt package(s) $*"
-    Retry sudo apt-get install $*
+    echo "Installing apt package(s) $@"
+    Retry sudo apt-get install "$@"
 }
 
 RInstall() {
@@ -133,7 +133,7 @@ RInstall() {
     fi
 
     echo "Installing R package(s): ${pkg}"
-    Rscript -e 'install.packages(commandArgs(TRUE), repos="'"${CRAN}"'")' $*
+    Rscript -e 'install.packages(commandArgs(TRUE), repos="'"${CRAN}"'")' "$@"
 }
 
 RBinaryInstall() {
@@ -158,9 +158,9 @@ RBinaryInstall() {
 InstallGithub() {
     EnsureDevtools
 
-    echo "Installing GitHub packages: $*"
+    echo "Installing GitHub packages: $@"
     # Install the package.
-    Rscript -e 'library(devtools); library(methods); options(repos=c(CRAN="'"${CRAN}"'")); install_github(commandArgs(TRUE))' $*
+    Rscript -e 'library(devtools); library(methods); options(repos=c(CRAN="'"${CRAN}"'")); install_github(commandArgs(TRUE))' "$@"
 }
 
 InstallDeps() {
@@ -175,7 +175,7 @@ DumpSysinfo() {
 
 DumpLogsByExtension() {
     if [[ -z "$1" ]]; then
-        echo "dump_logs_by_extension requires exactly one argument, got: $*"
+        echo "dump_logs_by_extension requires exactly one argument, got: $@"
         exit 1
     fi
     extension=$1
@@ -246,22 +246,22 @@ case $COMMAND in
     ##
     ## Install a binary deb package via apt-get
     "install_aptget"|"aptget_install")
-        AptGetInstall "$*"
+        AptGetInstall "$@"
         ;;
     ##
     ## Install an R dependency from CRAN
     "install_r"|"r_install")
-        RInstall "$*"
+        RInstall "$@"
         ;;
     ##
     ## Install an R dependency as a binary (via c2d4u PPA)
     "install_r_binary"|"r_binary_install")
-        RBinaryInstall "$*"
+        RBinaryInstall "$@"
         ;;
     ##
     ## Install a package from github sources (needs devtools)
     "install_github"|"github_package")
-        InstallGithub "$*"
+        InstallGithub "$@"
         ;;
     ##
     ## Install package dependencies from CRAN (needs devtools)
@@ -286,6 +286,6 @@ case $COMMAND in
     ##
     ## Dump selected build or check logs
     "dump_logs_by_extension")
-        DumpLogsByExtension "$*"
+        DumpLogsByExtension "$@"
         ;;
 esac
