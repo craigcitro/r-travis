@@ -217,13 +217,13 @@ RunTests() {
 
 Retry() {
     if "$@"; then
-        exit 0
+        return 0
     fi
     for wait_time in 5 20 30 60; do
         echo "Command failed, retrying in ${wait_time} ..."
         sleep ${wait_time}
         if "$@"; then
-            exit 0
+            return 0
         fi
     done
     echo "Failed all retries!"
