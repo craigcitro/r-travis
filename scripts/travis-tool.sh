@@ -105,9 +105,6 @@ EnsureDevtools() {
     if ! Rscript -e 'if (!("devtools" %in% rownames(installed.packages()))) q(status=1)' ; then
         # Install devtools and testthat.
         RBinaryInstall devtools testthat
-
-        # Bootstrap devtools to the live version on github.
-        Rscript -e 'library(devtools); library(methods); install_github("devtools")'
     fi
 }
 
