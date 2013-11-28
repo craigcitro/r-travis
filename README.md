@@ -13,6 +13,9 @@ should be able to set up travis for their own project by:
 * Add a [travis shield](http://about.travis-ci.org/docs/user/status-images/)
   to your `README` file.
 
+See the [wiki](https://github.com/craigcitro/r-travis/wiki) for more
+extensive documentation and examples.
+
 ## Linux or OS X builds
 
 By default, builds are done on Linux. That is enabled by choosing
