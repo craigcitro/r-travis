@@ -7,6 +7,7 @@ set -e
 set -x
 
 CRAN=${CRAN:-"http://cran.rstudio.com"}
+BASE_CRAN=${BASE_CRAN:-"http://cran.rstudio.com"}
 OS=$(uname -s)
 
 # MacTeX installs in a new $PATH entry, and there's no way to force
@@ -37,7 +38,7 @@ Bootstrap() {
 
 BootstrapLinux() {
     # Set up our CRAN mirror.
-    sudo add-apt-repository "deb ${CRAN}/bin/linux/ubuntu $(lsb_release -cs)/"
+    sudo add-apt-repository "deb ${BASE_CRAN}/bin/linux/ubuntu $(lsb_release -cs)/"
     sudo apt-key adv --keyserver keyserver.ubuntu.com --recv-keys E084DAB9
 
     # Add marutter's c2d4u repository.
@@ -74,7 +75,7 @@ BootstrapLinuxOptions() {
 
 BootstrapMac() {
     # Install from latest CRAN binary build for OS X
-    wget ${CRAN}/bin/macosx/R-latest.pkg  -O /tmp/R-latest.pkg
+    wget ${BASE_CRAN}/bin/macosx/R-latest.pkg  -O /tmp/R-latest.pkg
 
     echo "Installing OS X binary package for R"
     sudo installer -pkg "/tmp/R-latest.pkg" -target /

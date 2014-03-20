@@ -9,7 +9,7 @@ language: c
 env:
   global:
     - OS=$(uname -s)
-    - CRAN='c("http://cran.rstudio.com","http://www.omegahat.org/R")'
+    - CRAN=c("http://cran.rstudio.com","http://www.omegahat.org/R")
   matrix:
     - BOOTSTRAP_LATEX=" "
     - R_BUILD_ARGS=" " R_CHECK_ARGS="--as-cran" BOOTSTRAP_LATEX="1"
