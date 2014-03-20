@@ -9,6 +9,7 @@ language: c
 env:
   global:
     - OS=$(uname -s)
+    - CRAN='c("http://cran.rstudio.com","http://www.omegahat.org/R")'
   matrix:
     - BOOTSTRAP_LATEX=" "
     - R_BUILD_ARGS=" " R_CHECK_ARGS="--as-cran" BOOTSTRAP_LATEX="1"
@@ -41,6 +42,7 @@ install:
   - if test ${OS} = Linux; then test -n "$(which sponge)"; fi
   # Test install_r (which accepts multiple arguments).
   - ./travis-tool.sh install_r stringr lubridate
+  - ./travis-tool.sh install_r RGoogleStorage
   - Rscript -e 'library(stringr); library(lubridate)'
   # Test github package installation (which accepts multiple arguments).
   - Rscript -e 'stopifnot(!any(c("assertthat", "testthat", "roxygen2") %in% installed.packages())'
