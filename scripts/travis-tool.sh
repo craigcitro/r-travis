@@ -123,6 +123,26 @@ AptGetInstall() {
     Retry sudo apt-get install "$@"
 }
 
+DpkgCurlInstall() {
+    if [[ "Linux" != "${OS}" ]]; then
+        echo "Wrong OS: ${OS}"
+        exit 1
+    fi
+
+    if [[ "" == "$*" ]]; then
+        echo "No arguments to aptget_install"
+        exit 1
+    fi
+
+    echo "Installing remote package(s) $@"
+    for rf in "$@"; do 
+        curl -OL ${rf}
+        f=$(basename ${rf})
+        sudo dpkg -i ${f}
+        rm -v ${f}
+    done
+}
+
 RInstall() {
     if [[ "" == "$*" ]]; then
         echo "No arguments to r_install"
@@ -250,6 +270,11 @@ case $COMMAND in
     ## Install a binary deb package via apt-get
     "install_aptget"|"aptget_install")
         AptGetInstall "$@"
+        ;;
+    ##
+    ## Install a binary deb package via a curl call and local dpkg -i
+    "install_dpkgcurl"|"dpkgcurl_install")
+        DpkgCurlInstall "$@"
         ;;
     ##
     ## Install an R dependency from CRAN
