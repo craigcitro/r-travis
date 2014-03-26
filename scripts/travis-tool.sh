@@ -130,7 +130,7 @@ DpkgCurlInstall() {
     fi
 
     if [[ "" == "$*" ]]; then
-        echo "No arguments to aptget_install"
+        echo "No arguments to dpkgcurl_install"
         exit 1
     fi
 
