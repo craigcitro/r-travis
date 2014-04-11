@@ -185,7 +185,7 @@ InstallGithub() {
 
 InstallDeps() {
     EnsureDevtools
-    Rscript -e 'library(devtools); library(methods); options(repos=c(CRAN="'"${CRAN}"'")); devtools:::install_deps(dependencies = TRUE)'
+    Rscript -e 'library(devtools); library(methods); options(repos=c(CRAN="'"${CRAN}"'")); install_deps(dependencies = TRUE)'
 }
 
 DumpSysinfo() {
