@@ -9,8 +9,10 @@ should be able to set up travis for their own project by:
 * Adding `.travis.yml` to your `.Rbuildignore`.
 * Modifying `.travis.yml` to list any packages that must be installed from
   github (instead of CRAN).
-* [Turn on travis](https://travis-ci.org/profile) for your project.
-* Add a [travis shield](http://about.travis-ci.org/docs/user/status-images/)
+* [Turn on travis](https://travis-ci.org/profile) for your project. (Note that
+  in some cases, it may take time for travis to start watching your repo.)
+* Add a
+  [travis "build status" shield](http://about.travis-ci.org/docs/user/status-images/)
   to your `README` file.
 
 See the [wiki](https://github.com/craigcitro/r-travis/wiki) for more
