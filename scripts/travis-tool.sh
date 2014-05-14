@@ -7,6 +7,7 @@ set -e
 set -x
 
 CRAN=${CRAN:-"http://cran.rstudio.com"}
+BIO=${BIO:-"http://bioconductor.org/biocLite.R"}
 OS=$(uname -s)
 
 # MacTeX installs in a new $PATH entry, and there's no way to force
@@ -159,12 +160,12 @@ RInstall() {
 
 RBio() {
     if [[ "" == "$*" ]]; then
-        echo "No arguments to r_install"
+        echo "No arguments to bio_install"
         exit 1
     fi
 
     echo "Installing R package(s): ${pkg}"
-    Rscript -e 'source("http://bioconductor.org/biocLite.R");biocLite(commandArgs(TRUE))' "$@"
+    Rscript -e 'source("'"${BIO}"'");biocLite("$@")'
 }
 
 
