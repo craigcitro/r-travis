@@ -154,7 +154,7 @@ RInstall() {
     fi
 
     echo "Installing R package(s): ${pkg}"
-    Rscript -e 'install.packages(, repos="'"${CRAN}"'")' "$@"
+    Rscript -e 'install.packages(commandArgs(TRUE), repos="'"${CRAN}"'")' "$@"
 }
 
 
