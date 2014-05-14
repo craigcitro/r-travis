@@ -154,7 +154,7 @@ RInstall() {
     fi
 
     echo "Installing R package(s): ${pkg}"
-    Rscript -e 'install.packages(commandArgs(TRUE), repos="'"${CRAN}"'")' "$@"
+    Rscript -e 'install.packages(, repos="'"${CRAN}"'")' "$@"
 }
 
 
@@ -165,7 +165,7 @@ RBio() {
     fi
 
     echo "Installing R package(s): ${pkg}"
-    Rscript -e 'source("'"${BIO}"'");biocLite("$@")'
+    Rscript -e 'source("'"${BIO}"'");biocLite(commandArgs(TRUE))' "$@"
 }
 
 
