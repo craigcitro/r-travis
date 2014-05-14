@@ -156,6 +156,18 @@ RInstall() {
     Rscript -e 'install.packages(commandArgs(TRUE), repos="'"${CRAN}"'")' "$@"
 }
 
+
+RBio() {
+    if [[ "" == "$*" ]]; then
+        echo "No arguments to r_install"
+        exit 1
+    fi
+
+    echo "Installing R package(s): ${pkg}"
+    Rscript -e 'source("http://bioconductor.org/biocLite.R");biocLite(commandArgs(TRUE))' "$@"
+}
+
+
 RBinaryInstall() {
     if [[ -z "$#" ]]; then
         echo "No arguments to r_binary_install"
@@ -283,6 +295,11 @@ case $COMMAND in
     ## Install an R dependency from CRAN
     "install_r"|"r_install")
         RInstall "$@"
+        ;;
+    ##
+    ## Install an R dependency from Bioconductor
+    "install_bio"|"bio_install")
+        RBio "$@"
         ;;
     ##
     ## Install an R dependency as a binary (via c2d4u PPA)
