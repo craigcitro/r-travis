@@ -165,7 +165,7 @@ RBio() {
     fi
 
     echo "Installing R package(s): ${pkg}"
-    Rscript -e 'source("'"${BIO}"'");biocLite(commandArgs(TRUE))' $@
+    Rscript -e 'library(methods);source("'"${BIO}"'");biocLite(commandArgs(TRUE))' $@
 }
 
 
