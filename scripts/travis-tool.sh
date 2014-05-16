@@ -7,7 +7,7 @@ set -e
 set -x
 
 CRAN=${CRAN:-"http://cran.rstudio.com"}
-BIO=${BIO:-"http://bioconductor.org/biocLite.R"}
+BIOC=${BIOC:-"http://bioconductor.org/biocLite.R"}
 OS=$(uname -s)
 
 # MacTeX installs in a new $PATH entry, and there's no way to force
@@ -158,14 +158,14 @@ RInstall() {
 }
 
 
-RBio() {
+BiocInstall() {
     if [[ "" == "$*" ]]; then
-        echo "No arguments to bio_install"
+        echo "No arguments to bioc_install"
         exit 1
     fi
 
     echo "Installing R package(s): ${pkg}"
-    Rscript -e 'library(methods);source("'"${BIO}"'");biocLite(commandArgs(TRUE))' $@
+    Rscript -e 'library(methods); source("'"${BIOC}"'"); biocLite(commandArgs(TRUE))' $@
 }
 
 
@@ -299,8 +299,8 @@ case $COMMAND in
         ;;
     ##
     ## Install an R dependency from Bioconductor
-    "install_bio"|"bio_install")
-        RBio "$@"
+    "install_bioc"|"bioc_install")
+        BiocInstall "$@"
         ;;
     ##
     ## Install an R dependency as a binary (via c2d4u PPA)

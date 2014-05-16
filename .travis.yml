@@ -50,3 +50,4 @@ install:
   - if test ${OS} = Linux; then ./travis-tool.sh install_r_binary RUnit survey; fi
   - if test ${OS} = Linux; then Rscript -e 'library(RUnit); library(survey)'; fi
   - ./travis-tool.sh dump_sysinfo | grep -q 'R version '
+  - ./travis-tool.sh bioc_install GenomicFeatures AnnotationDbi
