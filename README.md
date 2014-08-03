@@ -6,6 +6,7 @@ This package has a simple shell script for use in running R package builds on
 [travis](http://travis-ci.org/), along with a sample `.travis.yml` file. One
 should be able to set up travis for their own project by:
 * Copying `sample.travis.yml` to `.travis.yml` in your project.
+  * Copying `sample_revdeps.travis.yml` to `.travis.yml` in your project will passively check reverse dependencies.
 * Adding `.travis.yml` to your `.Rbuildignore`.
 * Modifying `.travis.yml` to list any packages that must be installed from
   github (instead of CRAN).

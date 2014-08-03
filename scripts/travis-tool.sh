@@ -139,7 +139,7 @@ DpkgCurlInstall() {
     fi
 
     echo "Installing remote package(s) $@"
-    for rf in "$@"; do 
+    for rf in "$@"; do
         curl -OL ${rf}
         f=$(basename ${rf})
         sudo dpkg -i ${f}
@@ -201,6 +201,7 @@ InstallDeps() {
     Rscript -e 'library(devtools); library(methods); options(repos=c(CRAN="'"${CRAN}"'")); install_deps(dependencies = TRUE)'
 }
 
+
 DumpSysinfo() {
     echo "Dumping system information."
     R -e '.libPaths(); sessionInfo(); installed.packages()'
@@ -243,6 +244,12 @@ RunTests() {
         echo "(CRAN incoming checks are off)"
     fi
     _R_CHECK_CRAN_INCOMING_=${_R_CHECK_CRAN_INCOMING_} R CMD check "${FILE}" ${R_CHECK_ARGS}
+
+    # Check reverse dependencies
+    if [[ -n "$R_CHECK_REVDEP" ]]; then
+        echo "Checking reverse dependencies"
+        Rscript -e 'library(devtools); checkOutput <- unlist(revdep_check(as.package(".")$package));if (!is.null(checkOutput)) {print(data.frame(pkg = names(checkOutput), error = checkOutput));for(i in seq_along(checkOutput)){;cat("\n", names(checkOutput)[i], " Check Output:\n  ", paste(readLines(regmatches(checkOutput[i], regexec("/.*\\.out", checkOutput[i]))[[1]]), collapse = "\n  ", sep = ""), "\n", sep = "")};q(status = 1, save = "no")}'
+    fi
 
     if [[ -n "${WARNINGS_ARE_ERRORS}" ]]; then
         if DumpLogsByExtension "00check.log" | grep -q WARNING; then
