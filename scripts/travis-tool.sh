@@ -252,7 +252,7 @@ RunTests() {
     fi
 
     # Create binary package (currently Windows only)
-    if [[ "${OS}" == "MINGW*" ]]; then
+    if [[ "${OS:0:5}" == "MINGW" ]]; then
         echo "Creating binary package"
         R CMD INSTALL --build "${FILE}"
     fi
