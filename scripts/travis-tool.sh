@@ -251,6 +251,12 @@ RunTests() {
         Rscript -e 'library(devtools); checkOutput <- unlist(revdep_check(as.package(".")$package));if (!is.null(checkOutput)) {print(data.frame(pkg = names(checkOutput), error = checkOutput));for(i in seq_along(checkOutput)){;cat("\n", names(checkOutput)[i], " Check Output:\n  ", paste(readLines(regmatches(checkOutput[i], regexec("/.*\\.out", checkOutput[i]))[[1]]), collapse = "\n  ", sep = ""), "\n", sep = "")};q(status = 1, save = "no")}'
     fi
 
+    # Create binary package (currently Windows only)
+    if [[ "${OS:0:5}" == "MINGW" ]]; then
+        echo "Creating binary package"
+        R CMD INSTALL --build "${FILE}"
+    fi
+
     if [[ -n "${WARNINGS_ARE_ERRORS}" ]]; then
         if DumpLogsByExtension "00check.log" | grep -q WARNING; then
             echo "Found warnings, treated as errors."
