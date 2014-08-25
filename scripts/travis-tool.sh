@@ -265,23 +265,22 @@ RunTests() {
     # We want to grab the version we just built.
     FILE=$(ls -1t *.tar.gz | head -n 1)
 
-    echo "Testing with: R CMD check \"${FILE}\" ${R_CHECK_ARGS}"
+    # Create binary package (currently Windows only)
+    if [[ "${OS:0:5}" == "MINGW" ]]; then
+        R_CHECK_INSTALL_ARGS="--install-args=--build"
+    fi
+
+    echo "Testing with: R CMD check \"${FILE}\" ${R_CHECK_ARGS} ${R_CHECK_INSTALL_ARGS}"
     _R_CHECK_CRAN_INCOMING_=${_R_CHECK_CRAN_INCOMING_:-FALSE}
     if [[ "$_R_CHECK_CRAN_INCOMING_" == "FALSE" ]]; then
         echo "(CRAN incoming checks are off)"
     fi
-    _R_CHECK_CRAN_INCOMING_=${_R_CHECK_CRAN_INCOMING_} R CMD check "${FILE}" ${R_CHECK_ARGS}
+    _R_CHECK_CRAN_INCOMING_=${_R_CHECK_CRAN_INCOMING_} R CMD check "${FILE}" ${R_CHECK_ARGS} ${R_CHECK_INSTALL_ARGS}
 
     # Check reverse dependencies
     if [[ -n "$R_CHECK_REVDEP" ]]; then
         echo "Checking reverse dependencies"
         Rscript -e 'library(devtools); checkOutput <- unlist(revdep_check(as.package(".")$package));if (!is.null(checkOutput)) {print(data.frame(pkg = names(checkOutput), error = checkOutput));for(i in seq_along(checkOutput)){;cat("\n", names(checkOutput)[i], " Check Output:\n  ", paste(readLines(regmatches(checkOutput[i], regexec("/.*\\.out", checkOutput[i]))[[1]]), collapse = "\n  ", sep = ""), "\n", sep = "")};q(status = 1, save = "no")}'
-    fi
-
-    # Create binary package (currently Windows only)
-    if [[ "${OS:0:5}" == "MINGW" ]]; then
-        echo "Creating binary package"
-        R CMD INSTALL --build "${FILE}"
     fi
 
     if [[ -n "${WARNINGS_ARE_ERRORS}" ]]; then
