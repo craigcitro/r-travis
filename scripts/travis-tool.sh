@@ -214,7 +214,7 @@ DumpLogsByExtension() {
     fi
     extension=$1
     shift
-    package=$(find . -name *Rcheck -type d)
+    package=$(find . -maxdepth 1 -name "*.Rcheck" -type d)
     if [[ ${#package[@]} -ne 1 ]]; then
         echo "Could not find package Rcheck directory, skipping log dump."
         exit 0
