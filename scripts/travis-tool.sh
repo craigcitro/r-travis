@@ -8,6 +8,7 @@ set -x
 
 CRAN=${CRAN:-"http://cran.rstudio.com"}
 BIOC=${BIOC:-"http://bioconductor.org/biocLite.R"}
+BIOC_USE_DEVEL=${BIOC_USE_DEVEL:-"TRUE"}
 OS=$(uname -s)
 
 # MacTeX installs in a new $PATH entry, and there's no way to force
@@ -20,6 +21,12 @@ PATH="${PATH}:/usr/texbin"
 
 R_BUILD_ARGS=${R_BUILD_ARGS-"--no-build-vignettes --no-manual"}
 R_CHECK_ARGS=${R_CHECK_ARGS-"--no-build-vignettes --no-manual --as-cran"}
+
+R_USE_BIOC_CMDS="library(devtools);"\
+" source('${BIOC}');"\
+" tryCatch(useDevel(${BIOC_USE_DEVEL}),"\
+" error=function(e) {if (!grepl('already in use', e$message)) {e}});"\
+" options(repos=biocinstallRepos());"
 
 Bootstrap() {
     if [[ "Darwin" == "${OS}" ]]; then
@@ -153,10 +160,9 @@ RInstall() {
         exit 1
     fi
 
-    echo "Installing R package(s): ${pkg}"
+    echo "Installing R package(s): $@"
     Rscript -e 'install.packages(commandArgs(TRUE), repos="'"${CRAN}"'")' "$@"
 }
-
 
 BiocInstall() {
     if [[ "" == "$*" ]]; then
@@ -164,10 +170,9 @@ BiocInstall() {
         exit 1
     fi
 
-    echo "Installing R package(s): ${pkg}"
-    Rscript -e 'library(methods); source("'"${BIOC}"'"); biocLite(commandArgs(TRUE))' $@
+echo "Installing R Bioconductor package(s): $@"
+    Rscript -e "${R_USE_BIOC_CMDS}"' biocLite(commandArgs(TRUE))' "$@"
 }
-
 
 RBinaryInstall() {
     if [[ -z "$#" ]]; then
@@ -201,6 +206,10 @@ InstallDeps() {
     Rscript -e 'library(devtools); library(methods); options(repos=c(CRAN="'"${CRAN}"'")); install_deps(dependencies = TRUE)'
 }
 
+InstallBiocDeps() {
+    EnsureDevtools
+    Rscript -e "${R_USE_BIOC_CMDS}"' install_deps(dependencies = TRUE)'
+}
 
 DumpSysinfo() {
     echo "Dumping system information."
@@ -329,6 +338,11 @@ case $COMMAND in
     ## Install package dependencies from CRAN (needs devtools)
     "install_deps")
         InstallDeps
+        ;;
+    ##
+    ## Install package dependencies from Bioconductor and CRAN (needs devtools)
+    "install_bioc_deps")
+        InstallBiocDeps
         ;;
     ##
     ## Run the actual tests, ie R CMD check
