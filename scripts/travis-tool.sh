@@ -22,8 +22,7 @@ PATH="${PATH}:/usr/texbin"
 R_BUILD_ARGS=${R_BUILD_ARGS-"--no-build-vignettes --no-manual"}
 R_CHECK_ARGS=${R_CHECK_ARGS-"--no-build-vignettes --no-manual --as-cran"}
 
-R_USE_BIOC_CMDS="library(devtools);"\
-" source('${BIOC}');"\
+R_USE_BIOC_CMDS="source('${BIOC}');"\
 " tryCatch(useDevel(${BIOC_USE_DEVEL}),"\
 " error=function(e) {if (!grepl('already in use', e$message)) {e}});"\
 " options(repos=biocinstallRepos());"
@@ -170,7 +169,7 @@ BiocInstall() {
         exit 1
     fi
 
-echo "Installing R Bioconductor package(s): $@"
+    echo "Installing R Bioconductor package(s): $@"
     Rscript -e "${R_USE_BIOC_CMDS}"' biocLite(commandArgs(TRUE))' "$@"
 }
 
@@ -208,7 +207,7 @@ InstallDeps() {
 
 InstallBiocDeps() {
     EnsureDevtools
-    Rscript -e "${R_USE_BIOC_CMDS}"' install_deps(dependencies = TRUE)'
+    Rscript -e "${R_USE_BIOC_CMDS}"' library(devtools); install_deps(dependencies = TRUE)'
 }
 
 DumpSysinfo() {
