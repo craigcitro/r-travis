@@ -44,7 +44,7 @@ install:
   - Rscript -e 'library(stringr); library(lubridate)'
   # Test github package installation (which accepts multiple arguments).
   - Rscript -e 'stopifnot(!any(c("assertthat", "testthat", "roxygen2") %in% installed.packages())'
-  - ./travis-tool.sh install_github assertthat testthat klutometis/roxygen
+  - ./travis-tool.sh install_github hadley/assertthat hadley/testthat klutometis/roxygen
   - Rscript -e 'library(assertthat); library(testthat); library(roxygen2)'
   # Test R binary installation.
   - if test ${OS} = Linux; then ./travis-tool.sh install_r_binary RUnit survey; fi
