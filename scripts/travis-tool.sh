@@ -11,6 +11,10 @@ BIOC=${BIOC:-"http://bioconductor.org/biocLite.R"}
 BIOC_USE_DEVEL=${BIOC_USE_DEVEL:-"TRUE"}
 OS=$(uname -s)
 
+PANDOC_VERSION='1.12.4.2'
+PANDOC_DIR="${HOME}/opt"
+PANDOC_URL="https://s3.amazonaws.com/rstudio-buildtools/pandoc-${PANDOC_VERSION}.zip"
+
 # MacTeX installs in a new $PATH entry, and there's no way to force
 # the *parent* shell to source it from here. So we just manually add
 # all the entries to a location we already know to be on $PATH.
@@ -40,6 +44,15 @@ Bootstrap() {
     if ! (test -e .Rbuildignore && grep -q 'travis-tool' .Rbuildignore); then
         echo '^travis-tool\.sh$' >>.Rbuildignore
     fi
+}
+
+InstallPandoc() {
+    local os_path="$1"
+    mkdir -p "${PANDOC_DIR}"
+    curl -o /tmp/pandoc-${PANDOC_VERSION}.zip ${PANDOC_URL}
+    unzip -j /tmp/pandoc-${PANDOC_VERSION}.zip "pandoc-${PANDOC_VERSION}/${os_path}/pandoc" -d "${PANDOC_DIR}"
+    chmod +x "${PANDOC_DIR}/pandoc"
+    sudo ln -s "${PANDOC_DIR}/pandoc" /usr/local/bin
 }
 
 BootstrapLinux() {
@@ -80,6 +93,9 @@ BootstrapLinuxOptions() {
             texlive-extra-utils texlive-latex-recommended texlive-latex-extra \
             texinfo lmodern
     fi
+    if [[ -n "$BOOTSTRAP_PANDOC" ]]; then
+        InstallPandoc 'linux/debian/x86_64'
+    fi
 }
 
 BootstrapMac() {
@@ -108,6 +124,9 @@ BootstrapMacOptions() {
         #   https://stat.ethz.ch/pipermail/r-sig-mac/2010-May/007399.html
         sudo tlmgr update --self
         sudo tlmgr install inconsolata upquote courier courier-scaled helvetic
+    fi
+    if [[ -n "$BOOTSTRAP_PANDOC" ]]; then
+        InstallPandoc 'mac'
     fi
 }
 
