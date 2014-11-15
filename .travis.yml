@@ -3,7 +3,7 @@
 # If you're looking to use r-travis with your project, DO NOT USE THIS
 # FILE -- use `sample.travis.yml` instead.
 
-language: c
+language: objective-c
 # language: objective-c
 
 env:
