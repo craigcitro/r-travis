@@ -4,8 +4,10 @@
 # FILE -- use `sample.travis.yml` instead.
 
 language: c
-# language: objective-c
 
+os:
+  - linux
+  - osx
 env:
   global:
     - OS=$(uname -s)
