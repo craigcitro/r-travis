@@ -12,7 +12,7 @@ BIOC_USE_DEVEL=${BIOC_USE_DEVEL:-"TRUE"}
 OS=$(uname -s)
 
 PANDOC_VERSION='1.12.4.2'
-PANDOC_DIR="${HOME}/opt"
+PANDOC_DIR="${HOME}/opt/pandoc"
 PANDOC_URL="https://s3.amazonaws.com/rstudio-buildtools/pandoc-${PANDOC_VERSION}.zip"
 
 # MacTeX installs in a new $PATH entry, and there's no way to force
