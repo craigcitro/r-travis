@@ -1,57 +1,31 @@
 # .travis.yml for r-travis.
-#
-# If you're looking to use r-travis with your project, DO NOT USE THIS
-# FILE -- use `sample.travis.yml` instead.
 
-language: c
+language: r
 
 os:
   - linux
   - osx
-env:
-  global:
-    - OS=$(uname -s)
-  matrix:
-    - BOOTSTRAP_LATEX=" "
-    - R_BUILD_ARGS=" " R_CHECK_ARGS="--as-cran" BOOTSTRAP_LATEX="1" _R_CHECK_CRAN_INCOMING_=TRUE BOOTSTRAP_PANDOC="1"
-script: ./travis-tool.sh run_tests
+before_install:
+  - cd fakepackage
 notifications:
   email:
     on_success: change
     on_failure: change
-before_install:
-  - cp scripts/travis-tool.sh fakepackage
-  - cd fakepackage
-  - ./travis-tool.sh bootstrap
-before_script:
-  - ./travis-tool.sh dump_sysinfo
-after_success:
-  - ./travis-tool.sh dump_logs_by_extension out
-after_failure:
-  - ./travis-tool.sh dump_logs
-install:
-  - ./travis-tool.sh install_deps
-  # TESTS
-  #
-  # The following lines exist to test various features of our travis
-  # scripts; don't use these as a model for other `.travis.yml` files.
-  # Test install_aptget with multiple arguments.
-  - if test ${OS} = Linux; then test -z "$(which tmux)"; fi
-  - if test ${OS} = Linux; then test -z "$(which sponge)"; fi
-  - if test ${OS} = Linux; then ./travis-tool.sh install_aptget tmux moreutils; fi
-  - if test ${OS} = Linux; then test -n "$(which tmux)"; fi
-  - if test ${OS} = Linux; then test -n "$(which sponge)"; fi
-  # Test install_r (which accepts multiple arguments).
-  - ./travis-tool.sh install_r stringr lubridate
-  - Rscript -e 'library(stringr); library(lubridate)'
-  # Test github package installation (which accepts multiple arguments).
-  - Rscript -e 'stopifnot(!any(c("assertthat", "testthat", "roxygen2") %in% installed.packages())'
-  - ./travis-tool.sh install_github hadley/assertthat hadley/testthat klutometis/roxygen
-  - Rscript -e 'library(assertthat); library(testthat); library(roxygen2)'
-  # Test R binary installation.
-  - if test ${OS} = Linux; then ./travis-tool.sh install_r_binary RUnit survey; fi
-  - if test ${OS} = Linux; then Rscript -e 'library(RUnit); library(survey)'; fi
-  - ./travis-tool.sh dump_sysinfo | grep -q 'R version '
-  - ./travis-tool.sh bioc_install GenomicFeatures AnnotationDbi
-  - Rscript -e 'library(GenomicFeatures); library(AnnotationDbi)'
-  - if test ${BOOTSTRAP_PANDOC} = 1; then pandoc --version; fi
+
+apt_packages:
+  - tmux
+  - moreutils
+brew_packages:
+  - tmux
+r_binary_packages:
+  - RUnit
+  - survey
+r_packages:
+  - stringr
+  - lubridate
+bioc_packages:
+  - GenomicFeatures
+  - AnnotationDbi
+r_github_packages:
+  - hadley/assertthat
+  - klutometis/roxygen
