@@ -53,6 +53,9 @@ InstallPandoc() {
     unzip -j /tmp/pandoc-${PANDOC_VERSION}.zip "pandoc-${PANDOC_VERSION}/${os_path}/pandoc" -d "${PANDOC_DIR}"
     chmod +x "${PANDOC_DIR}/pandoc"
     sudo ln -s "${PANDOC_DIR}/pandoc" /usr/local/bin
+    unzip -j /tmp/pandoc-${PANDOC_VERSION}.zip "pandoc-${PANDOC_VERSION}/${os_path}/pandoc-citeproc" -d "${PANDOC_DIR}"
+    chmod +x "${PANDOC_DIR}/pandoc-citeproc"
+    sudo ln -s "${PANDOC_DIR}/pandoc-citeproc" /usr/local/bin
 }
 
 BootstrapLinux() {
