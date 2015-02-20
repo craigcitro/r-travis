@@ -13,8 +13,8 @@ notifications:
     on_failure: change
 
 apt_packages:
-  - tmux
   - moreutils
+  - tmux
 brew_packages:
   - tmux
 r_binary_packages:
