@@ -23,9 +23,9 @@ r_binary_packages:
 r_packages:
   - stringr
   - lubridate
-# bioc_packages:
-#   - GenomicFeatures
-#   - AnnotationDbi
+bioc_packages:
+  - GenomicFeatures
+  - AnnotationDbi
 r_github_packages:
   - hadley/assertthat
   - klutometis/roxygen
