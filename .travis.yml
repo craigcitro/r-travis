@@ -20,13 +20,14 @@ brew_packages:
 r_binary_packages:
   - RUnit
   - survey
+  - widgetfactorycontrollerfactory
 r_packages:
   - stringr
   - lubridate
-bioc_packages:
-  - AnnotationDbi
-  - GenomicFeatures
-  - NotSoRealPackage
+# bioc_packages:
+#   - AnnotationDbi
+#   - GenomicFeatures
+#   - NotSoRealPackage
 r_github_packages:
   - hadley/assertthat
   - klutometis/roxygen
