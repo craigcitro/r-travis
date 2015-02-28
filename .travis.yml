@@ -26,6 +26,7 @@ r_packages:
 bioc_packages:
   - AnnotationDbi
   - GenomicFeatures
+  - NotSoRealPackage
 r_github_packages:
   - hadley/assertthat
   - klutometis/roxygen
