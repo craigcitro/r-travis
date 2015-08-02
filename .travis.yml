@@ -45,9 +45,9 @@ install:
   - ./travis-tool.sh install_r stringr lubridate
   - Rscript -e 'library(stringr); library(lubridate)'
   # Test github package installation (which accepts multiple arguments).
-  - Rscript -e 'stopifnot(!any(c("assertthat", "testthat", "roxygen2") %in% installed.packages())'
-  - ./travis-tool.sh install_github hadley/assertthat hadley/testthat klutometis/roxygen
-  - Rscript -e 'library(assertthat); library(testthat); library(roxygen2)'
+  - Rscript -e 'stopifnot(!all(c("selectr", "rvest") %in% rownames(installed.packages())))'
+  - ./travis-tool.sh install_github sjp/selectr hadley/rvest
+  - Rscript -e 'library(selectr); library(rvest)'
   # Test R binary installation.
   - if test ${OS} = Linux; then ./travis-tool.sh install_r_binary RUnit survey; fi
   - if test ${OS} = Linux; then Rscript -e 'library(RUnit); library(survey)'; fi
