@@ -29,5 +29,5 @@ r_packages:
 #   - GenomicFeatures
 #   - NotSoRealPackage
 r_github_packages:
-  - hadley/assertthat
-  - klutometis/roxygen
+  - sjp/selectr
+  - hadley/rvest

@@ -2,6 +2,15 @@
 
 [![Build Status](https://travis-ci.org/craigcitro/r-travis.svg?branch=master,osx)](https://travis-ci.org/craigcitro/r-travis)
 
+# NATIVE R SUPPORT IN TRAVIS IS LIVE!
+
+We've finally merged support based on this repo into Travis-CI, so you can simply use `language: r` to test your R packages! 
+
+* New users should check out [the official Travis-CI R docs](http://docs.travis-ci.com/user/languages/r/)
+* Existing users should check out the [porting guide](https://github.com/craigcitro/r-travis/wiki/Porting-to-native-R-support-in-Travis).
+
+## Setting up r-travis
+
 This package has a simple shell script for use in running R package builds on
 [travis](http://travis-ci.org/), along with a sample `.travis.yml` file. One
 should be able to set up travis for their own project by:
