@@ -36,11 +36,11 @@ install:
   # The following lines exist to test various features of our travis
   # scripts; don't use these as a model for other `.travis.yml` files.
   # Test install_aptget with multiple arguments.
-  - if test ${OS} = Linux; then test -z "$(which tmux)"; fi
-  - if test ${OS} = Linux; then test -z "$(which sponge)"; fi
+  # - if test ${OS} = Linux; then test -z "$(which tmux)"; fi
+  # - if test ${OS} = Linux; then test -z "$(which sponge)"; fi
   - if test ${OS} = Linux; then ./travis-tool.sh install_aptget tmux moreutils; fi
-  - if test ${OS} = Linux; then test -n "$(which tmux)"; fi
-  - if test ${OS} = Linux; then test -n "$(which sponge)"; fi
+  # - if test ${OS} = Linux; then test -n "$(which tmux)"; fi
+  # - if test ${OS} = Linux; then test -n "$(which sponge)"; fi
   # Test install_r (which accepts multiple arguments).
   - ./travis-tool.sh install_r stringr lubridate
   - Rscript -e 'library(stringr); library(lubridate)'
