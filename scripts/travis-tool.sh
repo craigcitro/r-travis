@@ -311,6 +311,11 @@ Retry() {
 }
 
 COMMAND=$1
+echo "\033[0;31m
+r-travis is DEPRECATED!
+Please see https://docs.travis-ci.com/user/languages/r/ for info, or
+https://github.com/craigcitro/r-travis/wiki/Porting-to-native-R-support-in-Travis
+for information on porting to native R support in Travis.\033[0m"
 echo "Running command: ${COMMAND}"
 shift
 case $COMMAND in
